@@ -1,4 +1,6 @@
+
 import SwiftUI
+import UIKit
 
 struct MainView: View {
     @StateObject private var authChecker = AuthorizationChecker()
@@ -9,6 +11,16 @@ struct MainView: View {
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
     ]
+    
+    // Methode zur Initialisierung der Schriftart
+    func loadCustomFont(name: String, size: CGFloat) -> Font {
+        if let uiFont = UIFont(name: name, size: size) {
+            return Font(uiFont)
+        } else {
+            print("Fehler: Schriftart \(name) konnte nicht geladen werden.")
+            return Font.system(size: size)
+        }
+    }
     
     var body: some View {
         GeometryReader { geometry in
@@ -43,7 +55,14 @@ struct MainView: View {
                             Text("Zugriff auf Apple Music ist nicht autorisiert.")
                         }
                     }
-                    .navigationTitle("Deine RadauAPP")
+                    .navigationBarTitleDisplayMode(.inline)  // Verhindert großen Titel
+                    .toolbar {
+                        ToolbarItem(placement: .principal) {
+                            Text("Deine RadauApp")
+                                .font(loadCustomFont(name: "KristenITC-Regular", size: 24))  // Benutze ITCKRIST für den Titel
+                                .foregroundColor(ScreenPainter.textColor)
+                        }
+                    }
                     .background(ScreenPainter.backgroundColor.edgesIgnoringSafeArea(.all)) // Hintergrundfarbe auf NavigationView anwenden
                 }
 

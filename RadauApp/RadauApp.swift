@@ -13,6 +13,7 @@ struct RadauApp: App {
         UINavigationBar.appearance().compactAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().tintColor = .white // Setzt die Farbe des Zurück-Pfeils und des Textes auf Weiß
+        
     }
 
     var body: some Scene {

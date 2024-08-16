@@ -62,7 +62,7 @@ struct PlaylistDetailView: View {
                 ScreenPainter.renderMiniPlayer()
             }
             .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all))  // Primary Color für den gesamten ZStack
-            .navigationBarTitle("Playlist", displayMode: .inline)
+            .navigationBarTitle(playlist.name ?? "Playlist", displayMode: .inline)  // Zeige den Namen der Playlist
             .onAppear {
                 updateOrientation(geometry: geometry)
             }

@@ -25,6 +25,7 @@
 		4EBD6B882C6E0C900072A639 /* DeviceRotationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B872C6E0C900072A639 /* DeviceRotationExtension.swift */; };
 		4EBD6B8A2C6E27970072A639 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B892C6E27970072A639 /* MiniPlayerView.swift */; };
 		4EBD6B8C2C6EA4E40072A639 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B8B2C6EA4E40072A639 /* Color.swift */; };
+		4EBD6B8F2C6F8B500072A639 /* ITCKRIST.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 4EBD6B8E2C6F8B500072A639 /* ITCKRIST.TTF */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,8 @@
 		4EBD6B872C6E0C900072A639 /* DeviceRotationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceRotationExtension.swift; sourceTree = "<group>"; };
 		4EBD6B892C6E27970072A639 /* MiniPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
 		4EBD6B8B2C6EA4E40072A639 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		4EBD6B8D2C6F83680072A639 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		4EBD6B8E2C6F8B500072A639 /* ITCKRIST.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = ITCKRIST.TTF; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +136,8 @@
 		4EBD6B692C6DF47B0072A639 /* RadauApp */ = {
 			isa = PBXGroup;
 			children = (
+				4EBD6B8E2C6F8B500072A639 /* ITCKRIST.TTF */,
+				4EBD6B8D2C6F83680072A639 /* Info.plist */,
 				4EBD6B7B2C6DF9740072A639 /* Assets.xcassets */,
 				4EBD6B8B2C6EA4E40072A639 /* Color.swift */,
 				4EBD6B7D2C6DF9740072A639 /* Preview Content */,
@@ -267,6 +272,7 @@
 			files = (
 				4EBD6B7F2C6DF9740072A639 /* Preview Assets.xcassets in Resources */,
 				4EBD6B7E2C6DF9740072A639 /* Assets.xcassets in Resources */,
+				4EBD6B8F2C6F8B500072A639 /* ITCKRIST.TTF in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,11 +398,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_WKExtensionDelegateClassName = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				NEW_SETTING = "";
+				NEW_SETTING1 = "";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -450,11 +458,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_WKExtensionDelegateClassName = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				NEW_SETTING = "";
+				NEW_SETTING1 = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
@@ -473,6 +483,7 @@
 				DEVELOPMENT_TEAM = VFW8QA3BDR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RadauApp/Info.plist;
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "\"Diese App benötigt Zugriff auf Ihre Musikbibliothek, um Ihre Playlists anzuzeigen und Songs abzuspielen.\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -505,6 +516,7 @@
 				DEVELOPMENT_TEAM = VFW8QA3BDR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RadauApp/Info.plist;
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "\"Diese App benötigt Zugriff auf Ihre Musikbibliothek, um Ihre Playlists anzuzeigen und Songs abzuspielen.\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
