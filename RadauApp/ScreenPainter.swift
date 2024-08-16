@@ -29,8 +29,25 @@ class MiniPlayerManager: ObservableObject {
     }
 }
 
-struct ScreenPainter {
+class ScreenPainter: ObservableObject {
     static let miniPlayerManager = MiniPlayerManager()
+    
+    @Published var playlistImages: [UInt64: UIImage] = [:]
+
+    init() {
+        loadImages()
+    }
+
+    func loadImages() {
+        playlistImages = PlaylistImageHandler.shared.loadAllImages()
+    }
+
+    func updateImage(for playlist: MPMediaPlaylist, image: UIImage?) {
+        if let image = image {
+            playlistImages[playlist.persistentID] = image
+            PlaylistImageHandler.shared.saveImage(image, for: playlist.persistentID)
+        }
+    }
 
     // Farb-Schema
     static var primaryColor: Color = Color(hex: "#275457")
@@ -96,7 +113,13 @@ struct ScreenPainter {
     static func playlistCardView(for playlist: MPMediaPlaylist) -> some View {
         NavigationLink(destination: PlaylistDetailView(playlist: playlist)) {
             VStack {
-                if let artwork = getBestArtwork(for: playlist) {
+                if let customImage = ScreenPainter().playlistImages[playlist.persistentID] {
+                    Image(uiImage: customImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 100, height: 100)
+                        .cornerRadius(10)
+                } else if let artwork = getBestArtwork(for: playlist) {
                     artworkView(for: artwork, size: CGSize(width: 100, height: 100))
                 } else {
                     Image(systemName: "music.note.list")

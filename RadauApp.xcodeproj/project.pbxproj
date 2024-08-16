@@ -16,8 +16,6 @@
 		4EBD6B722C6DF4DB0072A639 /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B712C6DF4DB0072A639 /* MusicPlayer.swift */; };
 		4EBD6B742C6DF4FA0072A639 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B732C6DF4FA0072A639 /* MainView.swift */; };
 		4EBD6B762C6DF50A0072A639 /* PlaylistDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B752C6DF50A0072A639 /* PlaylistDetailView.swift */; };
-		4EBD6B782C6DF51A0072A639 /* ParentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B772C6DF51A0072A639 /* ParentsView.swift */; };
-		4EBD6B7A2C6DF52B0072A639 /* PlayListSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B792C6DF52B0072A639 /* PlayListSelectionView.swift */; };
 		4EBD6B7E2C6DF9740072A639 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EBD6B7B2C6DF9740072A639 /* Assets.xcassets */; };
 		4EBD6B7F2C6DF9740072A639 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EBD6B7C2C6DF9740072A639 /* Preview Assets.xcassets */; };
 		4EBD6B812C6DFCAA0072A639 /* PlaylistFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B802C6DFCAA0072A639 /* PlaylistFetcher.swift */; };
@@ -26,6 +24,8 @@
 		4EBD6B8A2C6E27970072A639 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B892C6E27970072A639 /* MiniPlayerView.swift */; };
 		4EBD6B8C2C6EA4E40072A639 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B8B2C6EA4E40072A639 /* Color.swift */; };
 		4EBD6B8F2C6F8B500072A639 /* ITCKRIST.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 4EBD6B8E2C6F8B500072A639 /* ITCKRIST.TTF */; };
+		4EBD6B952C6FA1270072A639 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B942C6FA1270072A639 /* PhotoPickerView.swift */; };
+		4EBD6B972C6FA4D50072A639 /* PlaylistImageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B962C6FA4D50072A639 /* PlaylistImageHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,8 +58,6 @@
 		4EBD6B712C6DF4DB0072A639 /* MusicPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
 		4EBD6B732C6DF4FA0072A639 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		4EBD6B752C6DF50A0072A639 /* PlaylistDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistDetailView.swift; sourceTree = "<group>"; };
-		4EBD6B772C6DF51A0072A639 /* ParentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentsView.swift; sourceTree = "<group>"; };
-		4EBD6B792C6DF52B0072A639 /* PlayListSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayListSelectionView.swift; sourceTree = "<group>"; };
 		4EBD6B7B2C6DF9740072A639 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "PoC-Archiv/Assets.xcassets"; sourceTree = SOURCE_ROOT; };
 		4EBD6B7C2C6DF9740072A639 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		4EBD6B802C6DFCAA0072A639 /* PlaylistFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistFetcher.swift; sourceTree = "<group>"; };
@@ -69,6 +67,8 @@
 		4EBD6B8B2C6EA4E40072A639 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		4EBD6B8D2C6F83680072A639 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4EBD6B8E2C6F8B500072A639 /* ITCKRIST.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = ITCKRIST.TTF; sourceTree = "<group>"; };
+		4EBD6B942C6FA1270072A639 /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
+		4EBD6B962C6FA4D50072A639 /* PlaylistImageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistImageHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,15 +144,15 @@
 				4EBD6B6A2C6DF49D0072A639 /* RadauApp.swift */,
 				4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */,
 				4EBD6B6F2C6DF4CA0072A639 /* ScreenPainter.swift */,
+				4EBD6B962C6FA4D50072A639 /* PlaylistImageHandler.swift */,
 				4EBD6B712C6DF4DB0072A639 /* MusicPlayer.swift */,
 				4EBD6B852C6E06FC0072A639 /* MusicPlayerView.swift */,
 				4EBD6B732C6DF4FA0072A639 /* MainView.swift */,
 				4EBD6B802C6DFCAA0072A639 /* PlaylistFetcher.swift */,
 				4EBD6B752C6DF50A0072A639 /* PlaylistDetailView.swift */,
+				4EBD6B942C6FA1270072A639 /* PhotoPickerView.swift */,
 				4EBD6B892C6E27970072A639 /* MiniPlayerView.swift */,
 				4EBD6B872C6E0C900072A639 /* DeviceRotationExtension.swift */,
-				4EBD6B772C6DF51A0072A639 /* ParentsView.swift */,
-				4EBD6B792C6DF52B0072A639 /* PlayListSelectionView.swift */,
 			);
 			path = RadauApp;
 			sourceTree = "<group>";
@@ -302,14 +302,14 @@
 				4EBD6B6D2C6DF4B10072A639 /* AuthorizationChecker.swift in Sources */,
 				4EBD6B8A2C6E27970072A639 /* MiniPlayerView.swift in Sources */,
 				4EBD6B8C2C6EA4E40072A639 /* Color.swift in Sources */,
+				4EBD6B952C6FA1270072A639 /* PhotoPickerView.swift in Sources */,
 				4EBD6B762C6DF50A0072A639 /* PlaylistDetailView.swift in Sources */,
 				4EBD6B812C6DFCAA0072A639 /* PlaylistFetcher.swift in Sources */,
 				4EBD6B722C6DF4DB0072A639 /* MusicPlayer.swift in Sources */,
-				4EBD6B782C6DF51A0072A639 /* ParentsView.swift in Sources */,
 				4EBD6B702C6DF4CA0072A639 /* ScreenPainter.swift in Sources */,
-				4EBD6B7A2C6DF52B0072A639 /* PlayListSelectionView.swift in Sources */,
 				4EBD6B862C6E06FC0072A639 /* MusicPlayerView.swift in Sources */,
 				4EBD6B6B2C6DF49D0072A639 /* RadauApp.swift in Sources */,
+				4EBD6B972C6FA4D50072A639 /* PlaylistImageHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

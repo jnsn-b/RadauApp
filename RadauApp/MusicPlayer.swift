@@ -27,6 +27,8 @@ class MusicPlayer: ObservableObject {
         player.play()
     }
     
+
+    
     func pause() {
         player.pause()
     }
