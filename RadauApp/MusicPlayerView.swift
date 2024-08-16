@@ -30,6 +30,7 @@ struct MusicPlayerView: View {
                 Spacer()
             }
             .padding()
+            .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all))  // Primary Color als Hintergrund
             .onAppear {
                 updateOrientation(geometry: geometry)
                 showMiniPlayer = false
@@ -43,8 +44,16 @@ struct MusicPlayerView: View {
             .gesture(
                 DragGesture(minimumDistance: 20)
                     .onEnded { value in
-                        if value.translation.height > 50 && !isLandscape {
-                            ScreenPainter.miniPlayerManager.minimizePlayer()
+                        if isLandscape {
+                            // Swipen nach unten im Landscape-Modus
+                            if value.translation.width > 100 {
+                                ScreenPainter.miniPlayerManager.minimizePlayer()
+                            }
+                        } else {
+                            // Swipen nach unten im Portrait-Modus
+                            if value.translation.height > 50 {
+                                ScreenPainter.miniPlayerManager.minimizePlayer()
+                            }
                         }
                     }
             )
@@ -54,11 +63,12 @@ struct MusicPlayerView: View {
     private var songInfoView: some View {
         VStack {
             Text(musicPlayer.currentSong?.title ?? "Unbenannter Titel")
-                .font(.headline)
+                .font(ScreenPainter.titleFont)
+                .foregroundColor(ScreenPainter.textColor)
                 .padding(.top, 20)
             
             Text(musicPlayer.currentSong?.artist ?? "Unbekannter Künstler")
-                .font(.subheadline)
+                .font(ScreenPainter.bodyFont)
                 .foregroundColor(.gray)
                 .padding(.bottom, 20)
         }
@@ -72,6 +82,7 @@ struct MusicPlayerView: View {
                 Image(systemName: "backward.fill")
                     .resizable()
                     .frame(width: 50, height: 50)
+                    .foregroundColor(ScreenPainter.secondaryColor)  // Nur die Vordergrundfarbe
             }
             
             Spacer()
@@ -86,6 +97,7 @@ struct MusicPlayerView: View {
                 Image(systemName: musicPlayer.isPlaying ? "pause.fill" : "play.fill")
                     .resizable()
                     .frame(width: 50, height: 50)
+                    .foregroundColor(ScreenPainter.secondaryColor)  // Nur die Vordergrundfarbe
             }
             
             Spacer()
@@ -96,6 +108,7 @@ struct MusicPlayerView: View {
                 Image(systemName: "forward.fill")
                     .resizable()
                     .frame(width: 50, height: 50)
+                    .foregroundColor(ScreenPainter.secondaryColor)  // Nur die Vordergrundfarbe
             }
         }
         .padding(.horizontal, 40)

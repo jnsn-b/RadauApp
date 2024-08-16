@@ -18,13 +18,16 @@ struct PlaylistDetailView: View {
                                     
                                     VStack(alignment: .leading) {
                                         Text(item.title ?? "Unbenannter Titel")
-                                            .font(.headline)
+                                            .font(ScreenPainter.titleFont)
+                                            .foregroundColor(ScreenPainter.textColor)
                                         Text(item.artist ?? "Unbekannter Künstler")
-                                            .font(.subheadline)
+                                            .font(ScreenPainter.bodyFont)
                                             .foregroundColor(.gray)
                                     }
                                 }
                                 .padding(.vertical, 5)
+                                .background(ScreenPainter.primaryColor)  // Primary Color für Listenelemente
+                                .cornerRadius(10)
                                 .onTapGesture {
                                     miniPlayerManager.musicPlayer.setQueue(with: playlist.items)
                                     if let index = playlist.items.firstIndex(of: item) {
@@ -33,7 +36,10 @@ struct PlaylistDetailView: View {
                                     miniPlayerManager.maximizePlayer()
                                 }
                             }
+                            .listRowBackground(ScreenPainter.primaryColor) // Primary Color für die Zeilen
                         }
+                        .listStyle(PlainListStyle())
+                        .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all)) // Primary Color für die gesamte List
                     } else {
                         ScrollView {
                             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 0) {
@@ -49,11 +55,14 @@ struct PlaylistDetailView: View {
                                 }
                             }
                         }
+                        .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all)) // Primary Color für die ScrollView
                     }
                 }
                 
                 ScreenPainter.renderMiniPlayer()
             }
+            .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all))  // Primary Color für den gesamten ZStack
+            .navigationBarTitle("Playlist", displayMode: .inline)
             .onAppear {
                 updateOrientation(geometry: geometry)
             }

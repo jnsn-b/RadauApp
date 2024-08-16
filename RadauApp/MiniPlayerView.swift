@@ -10,11 +10,12 @@ struct MiniPlayerView: View {
             
             VStack(alignment: .leading) {
                 Text(musicPlayer.currentSong?.title ?? "Unbenannter Titel")
-                    .font(.headline)
+                    .font(ScreenPainter.titleFont)
+                    .foregroundColor(ScreenPainter.textColor)
                     .lineLimit(1)
                 
                 Text(musicPlayer.currentSong?.artist ?? "Unbekannter Künstler")
-                    .font(.subheadline)
+                    .font(ScreenPainter.bodyFont)
                     .foregroundColor(.gray)
                     .lineLimit(1)
             }
@@ -31,6 +32,7 @@ struct MiniPlayerView: View {
                 Image(systemName: musicPlayer.isPlaying ? "pause.fill" : "play.fill")
                     .resizable()
                     .frame(width: 30, height: 30)
+                    .foregroundColor(ScreenPainter.secondaryColor)  // Nur die Vordergrundfarbe
             }
             
             Button(action: {
@@ -39,10 +41,11 @@ struct MiniPlayerView: View {
                 Image(systemName: "forward.fill")
                     .resizable()
                     .frame(width: 30, height: 30)
+                    .foregroundColor(ScreenPainter.secondaryColor)  // Nur die Vordergrundfarbe
             }
         }
         .padding()
-        .background(Color(UIColor.systemBackground))
+        .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all))  // Primary Color als Hintergrund
         .cornerRadius(10)
         .shadow(color: .gray, radius: 5, x: 0, y: 2)
     }

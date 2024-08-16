@@ -43,11 +43,13 @@ struct MainView: View {
                             Text("Zugriff auf Apple Music ist nicht autorisiert.")
                         }
                     }
-                    .navigationTitle("Playlists")
+                    .navigationTitle("Deine RadauAPP")
+                    .background(ScreenPainter.backgroundColor.edgesIgnoringSafeArea(.all)) // Hintergrundfarbe auf NavigationView anwenden
                 }
 
                 ScreenPainter.renderMiniPlayer()
             }
+            .background(ScreenPainter.backgroundColor.edgesIgnoringSafeArea(.all)) // Hintergrundfarbe auf den gesamten ZStack anwenden
             .onAppear {
                 DispatchQueue.main.async {
                     authChecker.checkAppleMusicAuthorization()

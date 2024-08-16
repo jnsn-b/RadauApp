@@ -32,16 +32,49 @@ class MiniPlayerManager: ObservableObject {
 struct ScreenPainter {
     static let miniPlayerManager = MiniPlayerManager()
 
+    // Farb-Schema
+    static var primaryColor: Color = Color(hex: "#275457")
+    static var secondaryColor: Color = .white
+    static var backgroundColor: Color = Color(hex: "#60B2B8")
+    static var textColor: Color = .white
+    
+    // Schriftarten
+    static var titleFont: Font = .headline
+    static var bodyFont: Font = .body
+
+    // Button-Stile
+    static func primaryButtonStyle() -> some View {
+        return Group {
+            Text("Button")
+                .padding()
+                .background(primaryColor)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+        }
+    }
+
+    // Player-Steuerelemente
+    static func playerControlButtonStyle() -> some View {
+        return Group {
+            Text("Control")
+                .padding()
+                .background(secondaryColor)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+        }
+    }
+
+    // Anpassung von Kartenstilen
     static func applyCardStyle(to view: AnyView) -> AnyView {
         AnyView(
             view
-                .background(Color.white)
+                .background(backgroundColor)
                 .cornerRadius(10)
                 .shadow(color: .gray, radius: 5, x: 0, y: 2)
                 .padding([.leading, .trailing], 8)
         )
     }
-    
+
     static func artworkView(for artwork: MPMediaItemArtwork?, size: CGSize) -> some View {
         Group {
             if let artwork = artwork {
@@ -63,12 +96,8 @@ struct ScreenPainter {
     static func playlistCardView(for playlist: MPMediaPlaylist) -> some View {
         NavigationLink(destination: PlaylistDetailView(playlist: playlist)) {
             VStack {
-                if let artwork = playlist.representativeItem?.artwork {
-                    Image(uiImage: artwork.image(at: CGSize(width: 100, height: 100)) ?? UIImage())
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100)
-                        .cornerRadius(10)
+                if let artwork = getBestArtwork(for: playlist) {
+                    artworkView(for: artwork, size: CGSize(width: 100, height: 100))
                 } else {
                     Image(systemName: "music.note.list")
                         .resizable()
@@ -78,16 +107,27 @@ struct ScreenPainter {
                 }
                 
                 Text(playlist.name ?? "Unbenannte Playlist")
-                    .font(.headline)
+                    .font(titleFont)
+                    .foregroundColor(primaryColor)
                     .lineLimit(1)
                     .padding([.leading, .trailing, .bottom], 5)
             }
             .frame(width: UIScreen.main.bounds.width / 2 - 24, height: 150)
-            .background(Color(UIColor.systemBackground))
+            .background(.white)
             .cornerRadius(10)
             .shadow(color: .gray, radius: 5, x: 0, y: 2)
         }
         .buttonStyle(PlainButtonStyle())
+    }
+
+    static func getBestArtwork(for playlist: MPMediaPlaylist) -> MPMediaItemArtwork? {
+        // Priorisiere das representativeItem der Playlist, da es das benutzerdefinierte Bild enthält
+        if let representativeArtwork = playlist.representativeItem?.artwork {
+            return representativeArtwork
+        }
+        
+        // Wenn das nicht funktioniert, verwende das Artwork des ersten Songs
+        return playlist.items.first?.artwork
     }
 
     static func renderMiniPlayer() -> some View {
@@ -95,7 +135,7 @@ struct ScreenPainter {
             return AnyView(
                 MiniPlayerView(musicPlayer: miniPlayerManager.musicPlayer)
                     .onTapGesture {
-                        miniPlayerManager.maximizePlayer() // Wechsel zurück zum Vollbild-Player bei Tap
+                        miniPlayerManager.maximizePlayer()
                     }
                     .transition(.move(edge: .bottom))
                     .animation(.easeInOut, value: miniPlayerManager.showMiniPlayer)
@@ -103,5 +143,30 @@ struct ScreenPainter {
         } else {
             return AnyView(EmptyView())
         }
+    }
+    
+    // Möglichkeit zur Laufzeit Farb-Schema zu ändern
+    static func updatePrimaryColor(to color: Color) {
+        primaryColor = color
+    }
+
+    static func updateSecondaryColor(to color: Color) {
+        secondaryColor = color
+    }
+
+    static func updateTextColor(to color: Color) {
+        textColor = color
+    }
+
+    static func updateBackgroundColor(to color: Color) {
+        backgroundColor = color
+    }
+
+    static func updateTitleFont(to font: Font) {
+        titleFont = font
+    }
+
+    static func updateBodyFont(to font: Font) {
+        bodyFont = font
     }
 }
