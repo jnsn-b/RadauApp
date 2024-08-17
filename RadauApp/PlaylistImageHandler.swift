@@ -15,11 +15,32 @@ class PlaylistImageHandler {
         return getDocumentsDirectory().appendingPathComponent("\(playlistID).png")
     }
 
+    // Bild skalieren
+    private func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        let size = image.size
+
+        let widthRatio  = targetSize.width  / size.width
+        let heightRatio = targetSize.height / size.height
+
+        let scaleFactor = min(widthRatio, heightRatio)
+
+        let scaledSize = CGSize(width: size.width * scaleFactor, height: size.height * scaleFactor)
+
+        UIGraphicsBeginImageContextWithOptions(scaledSize, false, 0.0)
+        image.draw(in: CGRect(origin: .zero, size: scaledSize))
+
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return newImage!
+    }
+
     // Speichern des Bildes im Dateisystem und in UserDefaults
     func saveImage(_ image: UIImage, for playlistID: UInt64) {
+        let resizedImage = resizeImage(image: image, targetSize: CGSize(width: 80, height: 80))
         let url = imagePath(for: playlistID)
 
-        if let data = image.pngData() {
+        if let data = resizedImage.pngData() {
             try? data.write(to: url)
 
             var savedPaths = UserDefaults.standard.dictionary(forKey: "playlistImages") as? [String: String] ?? [:]
@@ -28,28 +49,23 @@ class PlaylistImageHandler {
         }
     }
 
-    // Laden eines Bildes für eine bestimmte Playlist
+    // Laden des Bildes
     func loadImage(for playlistID: UInt64) -> UIImage? {
-        let path = UserDefaults.standard.dictionary(forKey: "playlistImages") as? [String: String] ?? [:]
-        if let imagePath = path[String(playlistID)],
-           let data = try? Data(contentsOf: URL(fileURLWithPath: imagePath)) {
-            return UIImage(data: data)
-        }
-        return nil
+        let url = imagePath(for: playlistID)
+        return UIImage(contentsOfFile: url.path)
     }
 
-    // Laden aller gespeicherten Bilder
+    // Alle gespeicherten Bilder laden
     func loadAllImages() -> [UInt64: UIImage] {
         var images: [UInt64: UIImage] = [:]
         let savedPaths = UserDefaults.standard.dictionary(forKey: "playlistImages") as? [String: String] ?? [:]
 
-        for (playlistIDString, path) in savedPaths {
-            if let playlistID = UInt64(playlistIDString),
-               let data = try? Data(contentsOf: URL(fileURLWithPath: path)),
-               let image = UIImage(data: data) {
+        for (key, path) in savedPaths {
+            if let playlistID = UInt64(key), let image = UIImage(contentsOfFile: path) {
                 images[playlistID] = image
             }
         }
+
         return images
     }
 }

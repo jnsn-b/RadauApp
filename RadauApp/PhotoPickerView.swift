@@ -4,11 +4,12 @@ import PhotosUI
 struct PhotoPickerView: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
     @Binding var selectedImage: UIImage?
+    var playlistID: UInt64
 
     func makeUIViewController(context: Context) -> PHPickerViewController {
         var configuration = PHPickerConfiguration()
-        configuration.filter = .images // Wir wollen nur Bilder auswählen können
-        configuration.selectionLimit = 1 // Nur ein Bild soll ausgewählt werden
+        configuration.filter = .images // Nur Bilder auswählen
+        configuration.selectionLimit = 1 // Nur ein Bild auswählen
 
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = context.coordinator
@@ -29,15 +30,22 @@ struct PhotoPickerView: UIViewControllerRepresentable {
         }
 
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-            parent.presentationMode.wrappedValue.dismiss()
+            picker.dismiss(animated: true, completion: nil)
 
-            guard let provider = results.first?.itemProvider, provider.canLoadObject(ofClass: UIImage.self) else { return }
+            guard let provider = results.first?.itemProvider else { return }
 
-            provider.loadObject(ofClass: UIImage.self) { image, error in
-                DispatchQueue.main.async {
-                    self.parent.selectedImage = image as? UIImage
+            if provider.canLoadObject(ofClass: UIImage.self) {
+                provider.loadObject(ofClass: UIImage.self) { [weak self] image, _ in
+                    DispatchQueue.main.async {
+                        if let uiImage = image as? UIImage {
+                            self?.parent.selectedImage = uiImage
+                            PlaylistImageHandler.shared.saveImage(uiImage, for: self?.parent.playlistID ?? 0)
+                        }
+                    }
                 }
             }
+
+            parent.presentationMode.wrappedValue.dismiss()
         }
     }
 }

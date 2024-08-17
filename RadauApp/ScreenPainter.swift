@@ -1,5 +1,6 @@
 import SwiftUI
 import MediaPlayer
+import MusicKit
 
 class MiniPlayerManager: ObservableObject {
     @Published var showMiniPlayer: Bool = false
@@ -42,11 +43,9 @@ class ScreenPainter: ObservableObject {
         playlistImages = PlaylistImageHandler.shared.loadAllImages()
     }
 
-    func updateImage(for playlist: MPMediaPlaylist, image: UIImage?) {
-        if let image = image {
-            playlistImages[playlist.persistentID] = image
-            PlaylistImageHandler.shared.saveImage(image, for: playlist.persistentID)
-        }
+    func updateImage(for playlist: MPMediaPlaylist, image: UIImage) {
+        let playlistID = playlist.persistentID
+        PlaylistImageHandler.shared.saveImage(image, for: playlistID)
     }
 
     // Farb-Schema
@@ -97,14 +96,16 @@ class ScreenPainter: ObservableObject {
             if let artwork = artwork {
                 Image(uiImage: artwork.image(at: size) ?? UIImage())
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: size.width, height: size.height)
+                    .clipped()
                     .cornerRadius(10)
             } else {
                 Image(systemName: "music.note")
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: size.width, height: size.height)
+                    .clipped()
                     .cornerRadius(10)
             }
         }
@@ -116,15 +117,16 @@ class ScreenPainter: ObservableObject {
                 if let customImage = ScreenPainter().playlistImages[playlist.persistentID] {
                     Image(uiImage: customImage)
                         .resizable()
-                        .aspectRatio(contentMode: .fit)
+                        .aspectRatio(contentMode: .fill)
                         .frame(width: 100, height: 100)
+                        .clipped()
                         .cornerRadius(10)
                 } else if let artwork = getBestArtwork(for: playlist) {
                     artworkView(for: artwork, size: CGSize(width: 100, height: 100))
                 } else {
                     Image(systemName: "music.note.list")
                         .resizable()
-                        .aspectRatio(contentMode: .fit)
+                        .aspectRatio(contentMode: .fill)
                         .frame(width: 100, height: 100)
                         .cornerRadius(10)
                 }

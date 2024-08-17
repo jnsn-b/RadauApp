@@ -33,11 +33,11 @@ struct PlaylistDetailView: View {
                             .foregroundColor(.white)  // Setzt die Farbe des Stift-Symbols auf Weiß
                     }
                     .sheet(isPresented: $showImagePicker) {
-                        PhotoPickerView(selectedImage: $selectedImage)
+                        PhotoPickerView(selectedImage: $selectedImage, playlistID: playlist.persistentID)
                             .onDisappear {
                                 if let image = selectedImage {
                                     let screenPainter = ScreenPainter()
-                                    screenPainter.updateImage(for: playlist, image: image)
+                                    screenPainter.updateImage(for: playlist, image: image) // playlistID wird hier verwendet
                                 }
                             }
                     }
