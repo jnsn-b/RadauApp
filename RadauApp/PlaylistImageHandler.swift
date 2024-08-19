@@ -43,6 +43,7 @@ class PlaylistImageHandler {
         if let data = resizedImage.pngData() {
             try? data.write(to: url)
 
+            // Convert playlistID to String for storage in UserDefaults
             var savedPaths = UserDefaults.standard.dictionary(forKey: "playlistImages") as? [String: String] ?? [:]
             savedPaths[String(playlistID)] = url.path
             UserDefaults.standard.set(savedPaths, forKey: "playlistImages")
