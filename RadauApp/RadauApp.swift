@@ -35,6 +35,8 @@ struct RadauApp: App {
         WindowGroup {
             // Einstiegspunkt der App, hier wird die MainView angezeigt
             MainView()
+            
+            
         }
     }
 }

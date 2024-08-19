@@ -27,6 +27,7 @@
 		4EBD6B952C6FA1270072A639 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B942C6FA1270072A639 /* PhotoPickerView.swift */; };
 		4EBD6B972C6FA4D50072A639 /* PlaylistImageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B962C6FA4D50072A639 /* PlaylistImageHandler.swift */; };
 		4EE81A6C2C73D7CE00F2EF41 /* MiniPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE81A6B2C73D7CE00F2EF41 /* MiniPlayerManager.swift */; };
+		4EE81A6F2C73E80D00F2EF41 /* iCloudHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE81A6E2C73E80D00F2EF41 /* iCloudHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,8 @@
 		4EBD6B942C6FA1270072A639 /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
 		4EBD6B962C6FA4D50072A639 /* PlaylistImageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistImageHandler.swift; sourceTree = "<group>"; };
 		4EE81A6B2C73D7CE00F2EF41 /* MiniPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerManager.swift; sourceTree = "<group>"; };
+		4EE81A6D2C73E78E00F2EF41 /* RadauApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RadauApp.entitlements; sourceTree = "<group>"; };
+		4EE81A6E2C73E80D00F2EF41 /* iCloudHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCloudHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,10 +141,12 @@
 		4EBD6B692C6DF47B0072A639 /* RadauApp */ = {
 			isa = PBXGroup;
 			children = (
+				4EE81A6D2C73E78E00F2EF41 /* RadauApp.entitlements */,
 				4EBD6B8E2C6F8B500072A639 /* ITCKRIST.TTF */,
 				4EBD6B8D2C6F83680072A639 /* Info.plist */,
 				4EBD6B7B2C6DF9740072A639 /* Assets.xcassets */,
 				4EBD6B8B2C6EA4E40072A639 /* Color.swift */,
+				4EE81A6E2C73E80D00F2EF41 /* iCloudHandler.swift */,
 				4EBD6B7D2C6DF9740072A639 /* Preview Content */,
 				4EBD6B6A2C6DF49D0072A639 /* RadauApp.swift */,
 				4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */,
@@ -308,6 +313,7 @@
 				4EBD6B952C6FA1270072A639 /* PhotoPickerView.swift in Sources */,
 				4EBD6B762C6DF50A0072A639 /* PlaylistDetailView.swift in Sources */,
 				4EBD6B812C6DFCAA0072A639 /* PlaylistFetcher.swift in Sources */,
+				4EE81A6F2C73E80D00F2EF41 /* iCloudHandler.swift in Sources */,
 				4EBD6B722C6DF4DB0072A639 /* MusicPlayer.swift in Sources */,
 				4EBD6B702C6DF4CA0072A639 /* ScreenPainter.swift in Sources */,
 				4EBD6B862C6E06FC0072A639 /* MusicPlayerView.swift in Sources */,
@@ -480,6 +486,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RadauApp/RadauApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -513,6 +520,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RadauApp/RadauApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
