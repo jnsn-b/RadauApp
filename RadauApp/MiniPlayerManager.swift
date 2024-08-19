@@ -1,8 +1,31 @@
-//
-//  MiniPlayerManager.swift
-//  RadauApp
-//
-//  Created by Jenson on 19.08.24.
-//
+import SwiftUI
+import MediaPlayer
+import MusicKit
 
-import Foundation
+class MiniPlayerManager: ObservableObject {
+    @Published var showMiniPlayer: Bool = false
+    @Published var showPlayer: Bool = false
+    var musicPlayer = MusicPlayer()
+    
+    func minimizePlayer() {
+        withAnimation {
+            showMiniPlayer = true
+            showPlayer = false
+        }
+    }
+    
+    func maximizePlayer() {
+        withAnimation {
+            showMiniPlayer = false
+            showPlayer = true
+        }
+    }
+    
+    func togglePlayer() {
+        if showPlayer {
+            minimizePlayer()
+        } else {
+            maximizePlayer()
+        }
+    }
+}

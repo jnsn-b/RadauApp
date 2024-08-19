@@ -26,6 +26,7 @@
 		4EBD6B8F2C6F8B500072A639 /* ITCKRIST.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 4EBD6B8E2C6F8B500072A639 /* ITCKRIST.TTF */; };
 		4EBD6B952C6FA1270072A639 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B942C6FA1270072A639 /* PhotoPickerView.swift */; };
 		4EBD6B972C6FA4D50072A639 /* PlaylistImageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B962C6FA4D50072A639 /* PlaylistImageHandler.swift */; };
+		4EE81A6C2C73D7CE00F2EF41 /* MiniPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE81A6B2C73D7CE00F2EF41 /* MiniPlayerManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		4EBD6B8E2C6F8B500072A639 /* ITCKRIST.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = ITCKRIST.TTF; sourceTree = "<group>"; };
 		4EBD6B942C6FA1270072A639 /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
 		4EBD6B962C6FA4D50072A639 /* PlaylistImageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistImageHandler.swift; sourceTree = "<group>"; };
+		4EE81A6B2C73D7CE00F2EF41 /* MiniPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +146,7 @@
 				4EBD6B6A2C6DF49D0072A639 /* RadauApp.swift */,
 				4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */,
 				4EBD6B6F2C6DF4CA0072A639 /* ScreenPainter.swift */,
+				4EE81A6B2C73D7CE00F2EF41 /* MiniPlayerManager.swift */,
 				4EBD6B962C6FA4D50072A639 /* PlaylistImageHandler.swift */,
 				4EBD6B712C6DF4DB0072A639 /* MusicPlayer.swift */,
 				4EBD6B852C6E06FC0072A639 /* MusicPlayerView.swift */,
@@ -308,6 +311,7 @@
 				4EBD6B722C6DF4DB0072A639 /* MusicPlayer.swift in Sources */,
 				4EBD6B702C6DF4CA0072A639 /* ScreenPainter.swift in Sources */,
 				4EBD6B862C6E06FC0072A639 /* MusicPlayerView.swift in Sources */,
+				4EE81A6C2C73D7CE00F2EF41 /* MiniPlayerManager.swift in Sources */,
 				4EBD6B6B2C6DF49D0072A639 /* RadauApp.swift in Sources */,
 				4EBD6B972C6FA4D50072A639 /* PlaylistImageHandler.swift in Sources */,
 			);

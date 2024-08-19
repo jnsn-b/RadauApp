@@ -1,6 +1,7 @@
 import SwiftUI
 import MediaPlayer
 
+// Detailansicht für eine ausgewählte Playlist
 struct PlaylistDetailView: View {
     let playlist: MPMediaPlaylist
     @ObservedObject var miniPlayerManager = ScreenPainter.miniPlayerManager
@@ -12,18 +13,20 @@ struct PlaylistDetailView: View {
         GeometryReader { geometry in
             ZStack(alignment: .bottom) {
                 VStack {
+                    // Anzeige je nach Bildschirmorientierung: Landscape oder Portrait
                     if isLandscape {
                         SongListView(playlist: playlist, miniPlayerManager: miniPlayerManager, isLandscape: true)
                     } else {
                         SongGridView(playlist: playlist, miniPlayerManager: miniPlayerManager, geometry: geometry, isLandscape: false)
                     }
                 }
-
+                // Mini-Player am unteren Rand der Ansicht
                 ScreenPainter.renderMiniPlayer()
             }
-            .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all))
-            .navigationBarTitle(playlist.name ?? "Playlist", displayMode: .inline)
+            .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all)) // Hintergrundfarbe anwenden
+            .navigationBarTitle(playlist.name ?? "Playlist", displayMode: .inline) // Titel der Navigation Bar
             .toolbar {
+                // Toolbar-Button zum Öffnen des Bildpickers
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         showImagePicker = true
@@ -45,13 +48,14 @@ struct PlaylistDetailView: View {
                 }
             }
             .onRotate { newOrientation in
-                // Verhindere, dass "faceUp" oder "faceDown" als Landscape oder Portrait behandelt werden
+                // Aktualisiere die Ausrichtung, aber ignoriere FaceUp und FaceDown
                 if newOrientation.isLandscape {
                     isLandscape = true
                 } else if newOrientation.isPortrait {
                     isLandscape = false
                 }
             }
+            // Zeigt den MusicPlayerView als modale Ansicht, wenn miniPlayerManager.showPlayer aktiviert ist
             .sheet(isPresented: $miniPlayerManager.showPlayer) {
                 MusicPlayerView(musicPlayer: miniPlayerManager.musicPlayer, showMiniPlayer: $miniPlayerManager.showMiniPlayer)
             }
@@ -59,6 +63,7 @@ struct PlaylistDetailView: View {
     }
 }
 
+// Ansicht für die Playlist im List-Layout
 struct SongListView: View {
     let playlist: MPMediaPlaylist
     @ObservedObject var miniPlayerManager: MiniPlayerManager
@@ -67,19 +72,19 @@ struct SongListView: View {
     var body: some View {
         List {
             // Zufallswiedergabe-Eintrag als erster Song
-            HStack(spacing: 15) { // Einstellung des Abstands zwischen dem Logo und dem Text
+            HStack(spacing: 15) {
                 Image(systemName: "shuffle")
                     .imageScale(.large)
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(ScreenPainter.textColor)
-                    .frame(width: 50, height: 50, alignment: .center) // Gleiche Größe und Ausrichtung wie das Coverbild
+                    .frame(width: 50, height: 50, alignment: .center)
 
                 VStack(alignment: .leading) {
                     Text("Zufallswiedergabe")
                         .font(.system(size: 20, weight: .bold))
                         .foregroundColor(ScreenPainter.textColor)
                 }
-                Spacer() // Sicherstellen, dass der gesamte Raum ausgefüllt wird
+                Spacer()
             }
             .padding(.vertical, 5)
             .frame(maxWidth: .infinity) // Zeile füllt die gesamte Breite aus
@@ -89,36 +94,38 @@ struct SongListView: View {
                 shuffleAndPlay()
             }
 
-            // Normale Songs
+            // Normale Songs in der Playlist
             ForEach(playlist.items, id: \.persistentID) { item in
-                HStack(spacing: 15) { // Gleicher Abstand wie beim Shuffle-Eintrag
+                HStack(spacing: 15) {
                     ScreenPainter.artworkView(for: item.artwork, size: CGSize(width: 50, height: 50))
                     
                     VStack(alignment: .leading, spacing: 4) {
                         Text(item.title ?? "Unbenannter Titel")
-                            .font(.system(size: 20, weight: .bold))  // Größere Schrift für den Titel
+                            .font(.system(size: 20, weight: .bold))
                             .foregroundColor(ScreenPainter.textColor)
                         Text(item.artist ?? "Unbekannter Künstler")
-                            .font(.system(size: 16))  // Größere Schrift für den Künstler
+                            .font(.system(size: 16))
                             .foregroundColor(.gray)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(.vertical, 5)
-                .background(ScreenPainter.primaryColor)  // Primary Color für Listenelemente
+                .background(ScreenPainter.primaryColor)
                 .onTapGesture {
-                    miniPlayerManager.musicPlayer.stopShuffle() // Hier stoppen wir den Shuffle-Modus
+                    // Stoppen des Shuffle-Modus und Abspielen des ausgewählten Songs
+                    miniPlayerManager.musicPlayer.stopShuffle()
                     miniPlayerManager.musicPlayer.setQueue(with: playlist.items)
                     miniPlayerManager.musicPlayer.play(at: playlist.items.firstIndex(of: item)!)
                     miniPlayerManager.maximizePlayer()
                 }
             }
-            .listRowBackground(ScreenPainter.primaryColor) // Primary Color für die Zeilen
+            .listRowBackground(ScreenPainter.primaryColor)
         }
         .listStyle(PlainListStyle())
-        .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all)) // Primary Color für die gesamte List
+        .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all))
     }
     
+    // Funktion zum Shuffle und Abspielen der Songs
     private func shuffleAndPlay() {
         miniPlayerManager.musicPlayer.setQueue(with: playlist.items)
         miniPlayerManager.musicPlayer.playShuffledQueue()
@@ -126,6 +133,7 @@ struct SongListView: View {
     }
 }
 
+// Ansicht für die Playlist im Grid-Layout
 struct SongGridView: View {
     let playlist: MPMediaPlaylist
     @ObservedObject var miniPlayerManager: MiniPlayerManager
@@ -154,11 +162,12 @@ struct SongGridView: View {
                     shuffleAndPlay()
                 }
 
-                // Normale Songs
+                // Normale Songs in der Playlist
                 ForEach(playlist.items, id: \.persistentID) { item in
                     ScreenPainter.artworkView(for: item.artwork, size: CGSize(width: geometry.size.width / 2, height: geometry.size.width / 2))
                         .onTapGesture {
-                            miniPlayerManager.musicPlayer.stopShuffle() // Hier stoppen wir den Shuffle-Modus
+                            // Stoppen des Shuffle-Modus und Abspielen des ausgewählten Songs
+                            miniPlayerManager.musicPlayer.stopShuffle()
                             miniPlayerManager.musicPlayer.setQueue(with: playlist.items)
                             miniPlayerManager.musicPlayer.play(at: playlist.items.firstIndex(of: item)!)
                             miniPlayerManager.maximizePlayer()
@@ -166,9 +175,10 @@ struct SongGridView: View {
                 }
             }
         }
-        .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all)) // Primary Color für die ScrollView
+        .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all))
     }
     
+    // Funktion zum Shuffle und Abspielen der Songs
     private func shuffleAndPlay() {
         miniPlayerManager.musicPlayer.setQueue(with: playlist.items)
         miniPlayerManager.musicPlayer.playShuffledQueue()

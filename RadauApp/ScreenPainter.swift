@@ -1,35 +1,8 @@
 import SwiftUI
 import MediaPlayer
-import MusicKit
 
-class MiniPlayerManager: ObservableObject {
-    @Published var showMiniPlayer: Bool = false
-    @Published var showPlayer: Bool = false
-    var musicPlayer = MusicPlayer()
-    
-    func minimizePlayer() {
-        withAnimation {
-            showMiniPlayer = true
-            showPlayer = false
-        }
-    }
-    
-    func maximizePlayer() {
-        withAnimation {
-            showMiniPlayer = false
-            showPlayer = true
-        }
-    }
-    
-    func togglePlayer() {
-        if showPlayer {
-            minimizePlayer()
-        } else {
-            maximizePlayer()
-        }
-    }
-}
 
+// Klasse zur Verwaltung der Benutzeroberfläche und des Farbschemas
 class ScreenPainter: ObservableObject {
     static let miniPlayerManager = MiniPlayerManager()
     
@@ -39,48 +12,45 @@ class ScreenPainter: ObservableObject {
         loadImages()
     }
 
+    // Funktion zum Laden aller gespeicherten Bilder für Playlists
     func loadImages() {
         playlistImages = PlaylistImageHandler.shared.loadAllImages()
     }
 
+    // Funktion zum Aktualisieren des Bildes einer Playlist
     func updateImage(for playlist: MPMediaPlaylist, image: UIImage) {
         let playlistID = playlist.persistentID
         PlaylistImageHandler.shared.saveImage(image, for: playlistID)
+        loadImages() // Lädt die Bilder neu, um die Aktualisierung zu reflektieren
     }
 
-    // Farb-Schema
+    // Farb-Schema und Schriftarten
     static var primaryColor: Color = Color(hex: "#275457")
     static var secondaryColor: Color = .white
     static var backgroundColor: Color = Color(hex: "#60B2B8")
     static var textColor: Color = .white
-    
-    // Schriftarten
     static var titleFont: Font = .headline
     static var bodyFont: Font = .body
 
-    // Button-Stile
+    // Funktion zum Erstellen eines Standard-Button-Stils
     static func primaryButtonStyle() -> some View {
-        return Group {
-            Text("Button")
-                .padding()
-                .background(primaryColor)
-                .foregroundColor(.white)
-                .cornerRadius(10)
-        }
+        Text("Button")
+            .padding()
+            .background(primaryColor)
+            .foregroundColor(.white)
+            .cornerRadius(10)
     }
 
-    // Player-Steuerelemente
+    // Funktion zum Erstellen eines Standard-Steuerknopf-Stils für den Player
     static func playerControlButtonStyle() -> some View {
-        return Group {
-            Text("Control")
-                .padding()
-                .background(secondaryColor)
-                .foregroundColor(.white)
-                .cornerRadius(8)
-        }
+        Text("Control")
+            .padding()
+            .background(secondaryColor)
+            .foregroundColor(.white)
+            .cornerRadius(8)
     }
 
-    // Anpassung von Kartenstilen
+    // Funktion zum Anwenden des Kartenstils auf eine beliebige Ansicht
     static func applyCardStyle(to view: AnyView) -> AnyView {
         AnyView(
             view
@@ -91,6 +61,7 @@ class ScreenPainter: ObservableObject {
         )
     }
 
+    // Funktion zur Darstellung eines Artwork-Views für ein Musikstück
     static func artworkView(for artwork: MPMediaItemArtwork?, size: CGSize) -> some View {
         Group {
             if let artwork = artwork {
@@ -111,6 +82,7 @@ class ScreenPainter: ObservableObject {
         }
     }
 
+    // Funktion zur Darstellung einer Playlist-Karte
     static func playlistCardView(for playlist: MPMediaPlaylist) -> some View {
         NavigationLink(destination: PlaylistDetailView(playlist: playlist)) {
             VStack {
@@ -138,23 +110,24 @@ class ScreenPainter: ObservableObject {
                     .padding([.leading, .trailing, .bottom], 5)
             }
             .frame(width: UIScreen.main.bounds.width / 2 - 24, height: 150)
-            .background(.white)
+            .background(Color.white)
             .cornerRadius(10)
             .shadow(color: .gray, radius: 5, x: 0, y: 2)
         }
         .buttonStyle(PlainButtonStyle())
     }
 
+    // Funktion zur Ermittlung des besten Artworks für eine Playlist
     static func getBestArtwork(for playlist: MPMediaPlaylist) -> MPMediaItemArtwork? {
         // Priorisiere das representativeItem der Playlist, da es das benutzerdefinierte Bild enthält
         if let representativeArtwork = playlist.representativeItem?.artwork {
             return representativeArtwork
         }
-        
-        // Wenn das nicht funktioniert, verwende das Artwork des ersten Songs
+        // Verwende das Artwork des ersten Songs als Fallback
         return playlist.items.first?.artwork
     }
 
+    // Funktion zur Darstellung des Mini-Players
     static func renderMiniPlayer() -> some View {
         if miniPlayerManager.showMiniPlayer {
             return AnyView(
@@ -170,7 +143,7 @@ class ScreenPainter: ObservableObject {
         }
     }
     
-    // Möglichkeit zur Laufzeit Farb-Schema zu ändern
+    // Möglichkeit zur Laufzeit das Farb-Schema und die Schriftarten zu ändern
     static func updatePrimaryColor(to color: Color) {
         primaryColor = color
     }
