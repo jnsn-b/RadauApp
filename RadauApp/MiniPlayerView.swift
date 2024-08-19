@@ -46,7 +46,6 @@ struct MiniPlayerView: View {
         }
         .padding()
         .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all))  // Primary Color als Hintergrund
-        .cornerRadius(10)
         .shadow(color: .gray, radius: 5, x: 0, y: 2)
     }
 }
