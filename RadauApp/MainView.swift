@@ -1,25 +1,30 @@
 import SwiftUI
 import UIKit
+import Foundation
+import MediaPlayer
 
-// Hauptansicht der App, die den Inhalt der App darstellt
 struct MainView: View {
-    // Verwendung von @StateObject für die Verwaltung des Zustands der Autorisierung und des Playlist-Fetchers
+    @State private var selectedTab: Int = 0
     @StateObject private var authChecker = AuthorizationChecker()
-    @StateObject private var playlistFetcher = PlaylistFetcher()
+    @StateObject private var podcastFetcher = PodcastFetcher()
     @ObservedObject var miniPlayerManager = ScreenPainter.miniPlayerManager
-
-    // Definierung eines flexiblen Grid-Layouts mit zwei Spalten und einem Abstand von 16 Punkten
+    @StateObject private var playlistFetcher = PlaylistFetcher()
+    @State private var selectedPodcastURL: String? = nil
+    @State private var showPodcastDetail: Bool = false
+    @State private var showAddPodcastDialog: Bool = false
+    @State private var episodes: [PodcastFetcher.PodcastEpisode] = []
+    @State private var selectedPodcastTitle: String? = nil
+    @State private var podcastImageData: Data? = nil
+    
     let columns = [
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
     ]
     
-    // Methode zur Initialisierung einer benutzerdefinierten Schriftart
     func loadCustomFont(name: String, size: CGFloat) -> Font {
         if let uiFont = UIFont(name: name, size: size) {
             return Font(uiFont)
         } else {
-            // Fallback auf die Systemschriftart, falls die benutzerdefinierte Schriftart nicht geladen werden kann
             return Font.system(size: size)
         }
     }
@@ -29,68 +34,172 @@ struct MainView: View {
             ZStack(alignment: .bottom) {
                 NavigationView {
                     VStack {
-                        // Bedingte Anzeige des Inhalts basierend auf den Autorisierungszuständen
-                        if authChecker.isAuthorized && authChecker.isMusicKitAuthorized {
-                            ScrollView {
-                                LazyVGrid(columns: columns, spacing: 20) {
-                                    // Anzeigen der Playlists in einem Gitterlayout
-                                    ForEach(playlistFetcher.playlists, id: \.persistentID) { playlist in
-                                        ScreenPainter.playlistCardView(for: playlist)
-                                            .frame(height: 180)
-                                            .onTapGesture {
-                                                // Setzt die Warteschlange und spielt den ersten Titel ab, wenn auf eine Playlist geklickt wird
-                                                DispatchQueue.main.async {
-                                                    miniPlayerManager.musicPlayer.setQueue(with: playlist.items)
-                                                    if let firstItem = playlist.items.first {
-                                                        miniPlayerManager.musicPlayer.play(at: playlist.items.firstIndex(of: firstItem) ?? 0)
-                                                        miniPlayerManager.maximizePlayer()
-                                                    }
-                                                }
-                                            }
-                                    }
-                                }
-                                .padding()
-                            }
-                            // Startet das Abrufen der Playlists, sobald die Ansicht erscheint
-                            .onAppear {
-                                playlistFetcher.fetchPlaylists()
-                            }
-                        } else if authChecker.isAuthorized {
-                            // Nachricht, falls nur Apple Music autorisiert ist
-                            Text("Zugriff auf Apple Music ist autorisiert, aber nicht auf MusicKit.")
+                        Picker("Kategorie", selection: $selectedTab) {
+                            Text("🎵 Musik").tag(0)
+                            Text("🎙️ Podcasts").tag(1)
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .padding()
+                        
+                        if selectedTab == 0 {
+                            musicView()
                         } else {
-                            // Nachricht, falls keine Autorisierung vorhanden ist
-                            Text("Zugriff auf Apple Music ist nicht autorisiert.")
+                            PodcastView()
                         }
                     }
-                    // Verhindert die Anzeige eines großen Titels in der Navigationsleiste
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
-                        // Anpassung des Titels in der Navigationsleiste mit einer benutzerdefinierten Schriftart und Farbe
                         ToolbarItem(placement: .principal) {
                             Text("Deine RadauApp")
                                 .font(loadCustomFont(name: "KristenITC-Regular", size: 24))
                                 .foregroundColor(ScreenPainter.textColor)
                         }
                     }
-                    // Hintergrundfarbe auf die gesamte NavigationView anwenden
                     .background(ScreenPainter.backgroundColor.edgesIgnoringSafeArea(.all))
                 }
-
-                // Mini-Player anzeigen, der durch ScreenPainter gerendert wird
                 ScreenPainter.renderMiniPlayer()
             }
-            // Hintergrundfarbe auf den gesamten ZStack anwenden
             .background(ScreenPainter.backgroundColor.edgesIgnoringSafeArea(.all))
             .onAppear {
-                // Prüfen der Apple Music Autorisierung beim Erscheinen der Ansicht
                 DispatchQueue.main.async {
                     authChecker.checkAppleMusicAuthorization()
                 }
             }
-            // Präsentiert den MusicPlayerView als modale Ansicht, wenn miniPlayerManager.showPlayer aktiviert ist
             .sheet(isPresented: $miniPlayerManager.showPlayer) {
                 MusicPlayerView(musicPlayer: miniPlayerManager.musicPlayer, showMiniPlayer: $miniPlayerManager.showMiniPlayer)
+            }
+        }
+    }
+    
+    func musicView() -> some View {
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 20) {
+                ForEach(playlistFetcher.playlists, id: \.persistentID) { playlist in
+                    ScreenPainter.playlistCardView(for: playlist)
+                        .frame(height: 180)
+                        .onTapGesture {
+                            DispatchQueue.main.async {
+                                miniPlayerManager.musicPlayer.setQueue(with: playlist.items)
+                                if let firstItem = playlist.items.first {
+                                    miniPlayerManager.musicPlayer.play(at: playlist.items.firstIndex(of: firstItem) ?? 0)
+                                    miniPlayerManager.maximizePlayer()
+                                }
+                            }
+                        }
+                }
+            }
+            .padding()
+        }
+        .onAppear {
+            playlistFetcher.fetchPlaylists()
+        }
+    }
+    
+    func loadPodcastEpisodes(for podcast: PodcastFetcher.Podcast) {
+        print("Versuche, Episoden für Podcast mit URL: \(podcast.rssFeedURL) zu laden")
+
+        PodcastFetcher.fetchEpisodes(from: podcast.rssFeedURL, podcast: podcast) { updatedPodcast, fetchedEpisodes in
+            print("Episoden geladen: \(fetchedEpisodes.count)")
+            self.episodes = fetchedEpisodes
+            self.podcastImageData = updatedPodcast.artworkData
+            self.selectedPodcastTitle = updatedPodcast.name
+        }
+    }
+}
+
+struct PodcastView: View {
+    @State private var podcasts: [PodcastFetcher.Podcast] = []
+    @State private var isLoading = false
+    @State private var showAddPodcastDialog = false
+    
+    let columns = [GridItem(.adaptive(minimum: 150))]
+
+    var body: some View {
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 20) {
+                Button(action: {
+                    showAddPodcastDialog = true
+                }) {
+                    VStack {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.largeTitle)
+                            .foregroundColor(.white)
+                        Text("Neuen Podcast hinzufügen")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                    }
+                    .frame(height: 200)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+                }
+                
+                if isLoading {
+                    ProgressView()
+                } else if podcasts.isEmpty {
+                    Text("Keine Podcasts gefunden.")
+                } else {
+                    ForEach(podcasts, id: \.id) { podcast in
+                        PodcastCardView(podcast: podcast)
+                    }
+                }
+            }
+            .padding()
+        }
+        .onAppear {
+            loadPodcasts()
+        }
+        .sheet(isPresented: $showAddPodcastDialog) {
+            AddPodcastView(showAddPodcastDialog: $showAddPodcastDialog)
+        }
+    }
+    
+    private func loadPodcasts() {
+        isLoading = true
+        Task {
+            podcasts = await PodcastInfoHandler.getPodcasts()
+            isLoading = false
+        }
+    }
+}
+
+struct PodcastCardView: View {
+    @State private var podcastImage: UIImage?
+    let podcast: PodcastFetcher.Podcast
+
+    var body: some View {
+        VStack {
+            if let image = podcastImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 120, height: 120)
+                    .cornerRadius(10)
+            } else {
+                Image(systemName: "mic.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50, height: 50)
+                    .foregroundColor(.gray)
+            }
+
+            Text(podcast.name)
+                .font(.headline)
+                .foregroundColor(.primary)
+                .lineLimit(2)
+                .multilineTextAlignment(.center)
+        }
+        .frame(height: 200)
+        .background(Color.gray.opacity(0.2))
+        .cornerRadius(10)
+        .onAppear {
+            loadPic()
+        }
+    }
+
+    private func loadPic() {
+        PodcastFetcher.loadPodcastArtwork(for: podcast) { image in
+            DispatchQueue.main.async {
+                self.podcastImage = image
             }
         }
     }

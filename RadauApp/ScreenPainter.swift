@@ -102,7 +102,7 @@ class ScreenPainter: ObservableObject {
                         .frame(width: 100, height: 100)
                         .cornerRadius(10)
                 }
-                
+
                 Text(playlist.name ?? "Unbenannte Playlist")
                     .font(titleFont)
                     .foregroundColor(primaryColor)
@@ -116,7 +116,6 @@ class ScreenPainter: ObservableObject {
         }
         .buttonStyle(PlainButtonStyle())
     }
-
     // Funktion zur Ermittlung des besten Artworks für eine Playlist
     static func getBestArtwork(for playlist: MPMediaPlaylist) -> MPMediaItemArtwork? {
         // Priorisiere das representativeItem der Playlist, da es das benutzerdefinierte Bild enthält

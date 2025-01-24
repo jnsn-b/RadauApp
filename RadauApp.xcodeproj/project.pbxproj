@@ -10,6 +10,12 @@
 		4E5B17222C6CD6A50078948F /* RadauAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B17212C6CD6A50078948F /* RadauAppTests.swift */; };
 		4E5B172C2C6CD6A50078948F /* RadauAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B172B2C6CD6A50078948F /* RadauAppUITests.swift */; };
 		4E5B172E2C6CD6A50078948F /* RadauAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B172D2C6CD6A50078948F /* RadauAppUITestsLaunchTests.swift */; };
+		4E8C0E262D40DBBB00BCF53E /* PodcastFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C0E252D40DBB400BCF53E /* PodcastFetcher.swift */; };
+		4E8C0E282D40E4A900BCF53E /* PodcastDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C0E272D40E4A400BCF53E /* PodcastDetailView.swift */; };
+		4E8C0E2A2D40EB3F00BCF53E /* PodcastPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C0E292D40EB3900BCF53E /* PodcastPlayer.swift */; };
+		4E8C0E2C2D410C4900BCF53E /* PodcastInfoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C0E2B2D410C3C00BCF53E /* PodcastInfoHandler.swift */; };
+		4E8C0E2F2D410D1500BCF53E /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4E8C0E2E2D410D1500BCF53E /* FeedKit */; };
+		4E8C0E312D4183CD00BCF53E /* PodcastAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C0E302D4183BE00BCF53E /* PodcastAddView.swift */; };
 		4EBD6B6B2C6DF49D0072A639 /* RadauApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B6A2C6DF49D0072A639 /* RadauApp.swift */; };
 		4EBD6B6D2C6DF4B10072A639 /* AuthorizationChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */; };
 		4EBD6B702C6DF4CA0072A639 /* ScreenPainter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B6F2C6DF4CA0072A639 /* ScreenPainter.swift */; };
@@ -27,7 +33,6 @@
 		4EBD6B952C6FA1270072A639 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B942C6FA1270072A639 /* PhotoPickerView.swift */; };
 		4EBD6B972C6FA4D50072A639 /* PlaylistImageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B962C6FA4D50072A639 /* PlaylistImageHandler.swift */; };
 		4EE81A6C2C73D7CE00F2EF41 /* MiniPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE81A6B2C73D7CE00F2EF41 /* MiniPlayerManager.swift */; };
-		4EE81A6F2C73E80D00F2EF41 /* iCloudHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE81A6E2C73E80D00F2EF41 /* iCloudHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +59,11 @@
 		4E5B17272C6CD6A50078948F /* RadauAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RadauAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E5B172B2C6CD6A50078948F /* RadauAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadauAppUITests.swift; sourceTree = "<group>"; };
 		4E5B172D2C6CD6A50078948F /* RadauAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadauAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		4E8C0E252D40DBB400BCF53E /* PodcastFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastFetcher.swift; sourceTree = "<group>"; };
+		4E8C0E272D40E4A400BCF53E /* PodcastDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastDetailView.swift; sourceTree = "<group>"; };
+		4E8C0E292D40EB3900BCF53E /* PodcastPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastPlayer.swift; sourceTree = "<group>"; };
+		4E8C0E2B2D410C3C00BCF53E /* PodcastInfoHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastInfoHandler.swift; sourceTree = "<group>"; };
+		4E8C0E302D4183BE00BCF53E /* PodcastAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastAddView.swift; sourceTree = "<group>"; };
 		4EBD6B6A2C6DF49D0072A639 /* RadauApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadauApp.swift; sourceTree = "<group>"; };
 		4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationChecker.swift; sourceTree = "<group>"; };
 		4EBD6B6F2C6DF4CA0072A639 /* ScreenPainter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenPainter.swift; sourceTree = "<group>"; };
@@ -73,7 +83,6 @@
 		4EBD6B962C6FA4D50072A639 /* PlaylistImageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistImageHandler.swift; sourceTree = "<group>"; };
 		4EE81A6B2C73D7CE00F2EF41 /* MiniPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerManager.swift; sourceTree = "<group>"; };
 		4EE81A6D2C73E78E00F2EF41 /* RadauApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RadauApp.entitlements; sourceTree = "<group>"; };
-		4EE81A6E2C73E80D00F2EF41 /* iCloudHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCloudHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E8C0E2F2D410D1500BCF53E /* FeedKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,26 +151,30 @@
 		4EBD6B692C6DF47B0072A639 /* RadauApp */ = {
 			isa = PBXGroup;
 			children = (
-				4EE81A6D2C73E78E00F2EF41 /* RadauApp.entitlements */,
-				4EBD6B8E2C6F8B500072A639 /* ITCKRIST.TTF */,
-				4EBD6B8D2C6F83680072A639 /* Info.plist */,
 				4EBD6B7B2C6DF9740072A639 /* Assets.xcassets */,
-				4EBD6B8B2C6EA4E40072A639 /* Color.swift */,
-				4EE81A6E2C73E80D00F2EF41 /* iCloudHandler.swift */,
-				4EBD6B7D2C6DF9740072A639 /* Preview Content */,
-				4EBD6B6A2C6DF49D0072A639 /* RadauApp.swift */,
 				4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */,
-				4EBD6B6F2C6DF4CA0072A639 /* ScreenPainter.swift */,
+				4EBD6B8B2C6EA4E40072A639 /* Color.swift */,
+				4EBD6B872C6E0C900072A639 /* DeviceRotationExtension.swift */,
+				4EBD6B8D2C6F83680072A639 /* Info.plist */,
+				4EBD6B8E2C6F8B500072A639 /* ITCKRIST.TTF */,
+				4EBD6B732C6DF4FA0072A639 /* MainView.swift */,
 				4EE81A6B2C73D7CE00F2EF41 /* MiniPlayerManager.swift */,
-				4EBD6B962C6FA4D50072A639 /* PlaylistImageHandler.swift */,
+				4EBD6B892C6E27970072A639 /* MiniPlayerView.swift */,
 				4EBD6B712C6DF4DB0072A639 /* MusicPlayer.swift */,
 				4EBD6B852C6E06FC0072A639 /* MusicPlayerView.swift */,
-				4EBD6B732C6DF4FA0072A639 /* MainView.swift */,
-				4EBD6B802C6DFCAA0072A639 /* PlaylistFetcher.swift */,
-				4EBD6B752C6DF50A0072A639 /* PlaylistDetailView.swift */,
 				4EBD6B942C6FA1270072A639 /* PhotoPickerView.swift */,
-				4EBD6B892C6E27970072A639 /* MiniPlayerView.swift */,
-				4EBD6B872C6E0C900072A639 /* DeviceRotationExtension.swift */,
+				4EBD6B752C6DF50A0072A639 /* PlaylistDetailView.swift */,
+				4EBD6B802C6DFCAA0072A639 /* PlaylistFetcher.swift */,
+				4EBD6B962C6FA4D50072A639 /* PlaylistImageHandler.swift */,
+				4E8C0E302D4183BE00BCF53E /* PodcastAddView.swift */,
+				4E8C0E272D40E4A400BCF53E /* PodcastDetailView.swift */,
+				4E8C0E252D40DBB400BCF53E /* PodcastFetcher.swift */,
+				4E8C0E2B2D410C3C00BCF53E /* PodcastInfoHandler.swift */,
+				4E8C0E292D40EB3900BCF53E /* PodcastPlayer.swift */,
+				4EBD6B7D2C6DF9740072A639 /* Preview Content */,
+				4EE81A6D2C73E78E00F2EF41 /* RadauApp.entitlements */,
+				4EBD6B6A2C6DF49D0072A639 /* RadauApp.swift */,
+				4EBD6B6F2C6DF4CA0072A639 /* ScreenPainter.swift */,
 			);
 			path = RadauApp;
 			sourceTree = "<group>";
@@ -262,6 +276,9 @@
 				Base,
 			);
 			mainGroup = 4E5B17042C6CD6A10078948F;
+			packageReferences = (
+				4E8C0E2D2D410CEF00BCF53E /* XCRemoteSwiftPackageReference "FeedKit" */,
+			);
 			productRefGroup = 4E5B170E2C6CD6A10078948F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -307,19 +324,23 @@
 			files = (
 				4EBD6B882C6E0C900072A639 /* DeviceRotationExtension.swift in Sources */,
 				4EBD6B742C6DF4FA0072A639 /* MainView.swift in Sources */,
+				4E8C0E262D40DBBB00BCF53E /* PodcastFetcher.swift in Sources */,
 				4EBD6B6D2C6DF4B10072A639 /* AuthorizationChecker.swift in Sources */,
 				4EBD6B8A2C6E27970072A639 /* MiniPlayerView.swift in Sources */,
+				4E8C0E2C2D410C4900BCF53E /* PodcastInfoHandler.swift in Sources */,
 				4EBD6B8C2C6EA4E40072A639 /* Color.swift in Sources */,
 				4EBD6B952C6FA1270072A639 /* PhotoPickerView.swift in Sources */,
 				4EBD6B762C6DF50A0072A639 /* PlaylistDetailView.swift in Sources */,
 				4EBD6B812C6DFCAA0072A639 /* PlaylistFetcher.swift in Sources */,
-				4EE81A6F2C73E80D00F2EF41 /* iCloudHandler.swift in Sources */,
 				4EBD6B722C6DF4DB0072A639 /* MusicPlayer.swift in Sources */,
 				4EBD6B702C6DF4CA0072A639 /* ScreenPainter.swift in Sources */,
+				4E8C0E312D4183CD00BCF53E /* PodcastAddView.swift in Sources */,
 				4EBD6B862C6E06FC0072A639 /* MusicPlayerView.swift in Sources */,
 				4EE81A6C2C73D7CE00F2EF41 /* MiniPlayerManager.swift in Sources */,
 				4EBD6B6B2C6DF49D0072A639 /* RadauApp.swift in Sources */,
+				4E8C0E282D40E4A900BCF53E /* PodcastDetailView.swift in Sources */,
 				4EBD6B972C6FA4D50072A639 /* PlaylistImageHandler.swift in Sources */,
+				4E8C0E2A2D40EB3F00BCF53E /* PodcastPlayer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -665,6 +686,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4E8C0E2D2D410CEF00BCF53E /* XCRemoteSwiftPackageReference "FeedKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nmdias/FeedKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4E8C0E2E2D410D1500BCF53E /* FeedKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E8C0E2D2D410CEF00BCF53E /* XCRemoteSwiftPackageReference "FeedKit" */;
+			productName = FeedKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4E5B17052C6CD6A10078948F /* Project object */;
 }
