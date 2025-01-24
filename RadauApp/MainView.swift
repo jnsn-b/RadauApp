@@ -36,7 +36,7 @@ struct MainView: View {
                     VStack {
                         Picker("Kategorie", selection: $selectedTab) {
                             Text("🎵 Musik").tag(0)
-                            Text("🎙️ Podcasts").tag(1)
+                            Text("🎙️ Shows").tag(1)
                         }
                         .pickerStyle(SegmentedPickerStyle())
                         .padding()
