@@ -2,22 +2,49 @@ import Foundation
 import AVFoundation
 import FeedKit
 
-// Der PodcastPlayer, der zum Abspielen der Episoden zuständig ist
-class PodcastPlayer: ObservableObject {  // <- Hinzufügen von ObservableObject
+class PodcastPlayer: ObservableObject {
     @Published var currentEpisode: PodcastFetcher.PodcastEpisode? // Verwende den Typ aus PodcastFetcher
     var player: AVPlayer?
+
+    init() {
+        // Setze die Audio-Sitzung, um die Hintergrundwiedergabe zu ermöglichen
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Fehler beim Konfigurieren der AVAudioSession: \(error)")
+        }
+    }
 
     // Funktion, um eine Episode abzuspielen
     func play(episode: PodcastFetcher.PodcastEpisode) {
         self.currentEpisode = episode
+        print("Spiele Episode: \(episode.title), URL: \(episode.playbackURL)") // Debug-Ausgabe
 
         // Falls eine gültige URL für die Episode vorhanden ist
         if let url = URL(string: episode.playbackURL) {
-            player = AVPlayer(url: url)
-            player?.play()
+            print("Gültige URL: \(url)")
+            
+            // Lade und spiele direkt ab
+            playStream(url: url)
         } else {
             print("Keine gültige URL für die Episode.")
         }
+    }
+
+    private func playStream(url: URL) {
+        // Erstelle ein AVAsset direkt aus der URL
+        let asset = AVAsset(url: url)
+        
+        // Erstelle einen AVPlayerItem aus dem Asset
+        let playerItem = AVPlayerItem(asset: asset)
+        
+        // AVPlayer initialisieren
+        self.player = AVPlayer(playerItem: playerItem)
+        
+        // Starte die Wiedergabe
+        self.player?.play()
+        print("AVPlayer gestartet mit Stream URL: \(url)")
     }
 
     // Funktion, um zur nächsten Episode zu wechseln (falls vorhanden)
@@ -63,4 +90,6 @@ class PodcastPlayer: ObservableObject {  // <- Hinzufügen von ObservableObject
             player?.seek(to: newTime)
         }
     }
+    
+    
 }

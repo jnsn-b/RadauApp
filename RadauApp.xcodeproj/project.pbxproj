@@ -16,6 +16,7 @@
 		4E8C0E2C2D410C4900BCF53E /* PodcastInfoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C0E2B2D410C3C00BCF53E /* PodcastInfoHandler.swift */; };
 		4E8C0E2F2D410D1500BCF53E /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4E8C0E2E2D410D1500BCF53E /* FeedKit */; };
 		4E8C0E312D4183CD00BCF53E /* PodcastAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C0E302D4183BE00BCF53E /* PodcastAddView.swift */; };
+		4EAEB9AF2D4627BD00929BEA /* PodcastStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEB9AE2D4627BD00929BEA /* PodcastStore.swift */; };
 		4EBD6B6B2C6DF49D0072A639 /* RadauApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B6A2C6DF49D0072A639 /* RadauApp.swift */; };
 		4EBD6B6D2C6DF4B10072A639 /* AuthorizationChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */; };
 		4EBD6B702C6DF4CA0072A639 /* ScreenPainter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B6F2C6DF4CA0072A639 /* ScreenPainter.swift */; };
@@ -64,6 +65,7 @@
 		4E8C0E292D40EB3900BCF53E /* PodcastPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastPlayer.swift; sourceTree = "<group>"; };
 		4E8C0E2B2D410C3C00BCF53E /* PodcastInfoHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastInfoHandler.swift; sourceTree = "<group>"; };
 		4E8C0E302D4183BE00BCF53E /* PodcastAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastAddView.swift; sourceTree = "<group>"; };
+		4EAEB9AE2D4627BD00929BEA /* PodcastStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastStore.swift; sourceTree = "<group>"; };
 		4EBD6B6A2C6DF49D0072A639 /* RadauApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadauApp.swift; sourceTree = "<group>"; };
 		4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationChecker.swift; sourceTree = "<group>"; };
 		4EBD6B6F2C6DF4CA0072A639 /* ScreenPainter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenPainter.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 		4EBD6B692C6DF47B0072A639 /* RadauApp */ = {
 			isa = PBXGroup;
 			children = (
+				4EAEB9AE2D4627BD00929BEA /* PodcastStore.swift */,
 				4EBD6B7B2C6DF9740072A639 /* Assets.xcassets */,
 				4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */,
 				4EBD6B8B2C6EA4E40072A639 /* Color.swift */,
@@ -252,7 +255,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					4E5B170C2C6CD6A10078948F = {
 						CreatedOnToolsVersion = 15.4;
@@ -338,6 +341,7 @@
 				4EBD6B862C6E06FC0072A639 /* MusicPlayerView.swift in Sources */,
 				4EE81A6C2C73D7CE00F2EF41 /* MiniPlayerManager.swift in Sources */,
 				4EBD6B6B2C6DF49D0072A639 /* RadauApp.swift in Sources */,
+				4EAEB9AF2D4627BD00929BEA /* PodcastStore.swift in Sources */,
 				4E8C0E282D40E4A900BCF53E /* PodcastDetailView.swift in Sources */,
 				4EBD6B972C6FA4D50072A639 /* PlaylistImageHandler.swift in Sources */,
 				4E8C0E2A2D40EB3F00BCF53E /* PodcastPlayer.swift in Sources */,
@@ -573,7 +577,6 @@
 		4E5B17352C6CD6A50078948F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -593,7 +596,6 @@
 		4E5B17362C6CD6A50078948F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -613,7 +615,6 @@
 		4E5B17382C6CD6A50078948F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VFW8QA3BDR;
@@ -631,7 +632,6 @@
 		4E5B17392C6CD6A50078948F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VFW8QA3BDR;

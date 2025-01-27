@@ -1,12 +1,17 @@
+import MediaPlayer
 import SwiftUI
 
 struct PodcastDetailView: View {
-    @State private var podcast: PodcastFetcher.Podcast  // Ändere dies von let zu @State
+    
+    @State private var podcast: PodcastFetcher.Podcast
     @State private var episodes: [PodcastFetcher.PodcastEpisode] = []
-    @State private var currentEpisode: PodcastFetcher.PodcastEpisode?
     @StateObject private var podcastPlayer = PodcastPlayer()
-    
-    
+    @State private var isPlaying: Bool = false
+
+    init(initialPodcast: PodcastFetcher.Podcast) {
+        _podcast = State(initialValue: initialPodcast)
+    }
+
     var body: some View {
         VStack {
             podcastArtwork
@@ -21,8 +26,11 @@ struct PodcastDetailView: View {
             playerControls
         }
         .onAppear(perform: fetchEpisodes)
+        .onChange(of: podcastPlayer.player?.timeControlStatus) { status in
+            isPlaying = status == .playing
+        }
     }
-    
+
     private var podcastArtwork: some View {
         Group {
             if let data = podcast.artworkData, let image = UIImage(data: data) {
@@ -40,7 +48,7 @@ struct PodcastDetailView: View {
             }
         }
     }
-    
+
     private var episodesList: some View {
         List(episodes) { episode in
             HStack {
@@ -55,34 +63,59 @@ struct PodcastDetailView: View {
             }
             .onTapGesture {
                 podcastPlayer.play(episode: episode)
-                currentEpisode = episode
+                isPlaying = true
             }
         }
     }
-    
+
     private var playerControls: some View {
         HStack {
-            Button("Vorherige") {
-                if let episode = currentEpisode {
-                    podcastPlayer.previous(episodes: episodes, currentEpisode: episode)
+            Button(action: {
+                if let currentEpisode = podcastPlayer.currentEpisode {
+                    podcastPlayer.previous(episodes: episodes, currentEpisode: currentEpisode)
                 }
-            }
-            Button("Nächste") {
-                if let episode = currentEpisode {
-                    podcastPlayer.next(episodes: episodes, currentEpisode: episode)
-                }
+            }) {
+                Image(systemName: "backward.fill")
+                    .resizable()
+                    .frame(width: 30, height: 30)
+                    .foregroundColor(.white)
             }
 
-            Button("Stoppen") {
-                podcastPlayer.stop()
-                currentEpisode = nil
+            Spacer()
+
+            Button(action: {
+                if isPlaying {
+                    podcastPlayer.player?.pause()
+                } else {
+                    podcastPlayer.player?.play()
+                }
+                isPlaying.toggle()
+            }) {
+                Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                    .resizable()
+                    .frame(width: 30, height: 30)
+                    .foregroundColor(.white)
+            }
+
+            Spacer()
+
+            Button(action: {
+                if let currentEpisode = podcastPlayer.currentEpisode {
+                    podcastPlayer.next(episodes: episodes, currentEpisode: currentEpisode)
+                }
+            }) {
+                Image(systemName: "forward.fill")
+                    .resizable()
+                    .frame(width: 30, height: 30)
+                    .foregroundColor(.white)
             }
         }
         .padding()
+        .background(Color.black.opacity(0.7))
+        .cornerRadius(10)
     }
 
     private func fetchEpisodes() {
-        // Entfernen des 'if let', da 'podcast' bereits ein existierendes Objekt ist
         PodcastFetcher.fetchEpisodes(from: podcast.rssFeedURL, podcast: podcast) { updatedPodcast, fetchedEpisodes in
             self.episodes = fetchedEpisodes
             self.podcast = updatedPodcast
@@ -95,6 +128,3 @@ extension PodcastFetcher.PodcastEpisode {
         Int(Double(playbackDurationString) ?? 0) / 60
     }
 }
-
-
-

@@ -15,6 +15,8 @@ struct MainView: View {
     @State private var episodes: [PodcastFetcher.PodcastEpisode] = []
     @State private var selectedPodcastTitle: String? = nil
     @State private var podcastImageData: Data? = nil
+    @StateObject private var podcastStore = PodcastStore()
+
     
     let columns = [
         GridItem(.flexible(), spacing: 16),
@@ -44,7 +46,7 @@ struct MainView: View {
                         if selectedTab == 0 {
                             musicView()
                         } else {
-                            PodcastView()
+                            PodcastView(podcastStore: podcastStore)
                         }
                     }
                     .navigationBarTitleDisplayMode(.inline)
@@ -108,8 +110,7 @@ struct MainView: View {
 }
 
 struct PodcastView: View {
-    @State private var podcasts: [PodcastFetcher.Podcast] = []
-    @State private var isLoading = false
+    @ObservedObject var podcastStore: PodcastStore
     @State private var showAddPodcastDialog = false
     
     let columns = [GridItem(.adaptive(minimum: 150))]
@@ -132,35 +133,30 @@ struct PodcastView: View {
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(10)
                 }
-                
-                if isLoading {
-                    ProgressView()
-                } else if podcasts.isEmpty {
+                if podcastStore.podcasts.isEmpty {
                     Text("Keine Podcasts gefunden.")
                 } else {
-                    ForEach(podcasts, id: \.id) { podcast in
-                        PodcastCardView(podcast: podcast)
+                    ForEach(podcastStore.podcasts, id: \.id) { podcast in
+                        NavigationLink(destination: PodcastDetailView(initialPodcast: podcast)) {
+                            PodcastCardView(podcast: podcast)
+                        }
                     }
                 }
             }
             .padding()
         }
-        .onAppear {
-            loadPodcasts()
-        }
+        .background(ScreenPainter.backgroundColor.edgesIgnoringSafeArea(.all))
         .sheet(isPresented: $showAddPodcastDialog) {
             AddPodcastView(showAddPodcastDialog: $showAddPodcastDialog)
         }
-    }
-    
-    private func loadPodcasts() {
-        isLoading = true
-        Task {
-            podcasts = await PodcastInfoHandler.getPodcasts()
-            isLoading = false
+
+        .onAppear {
+            podcastStore.loadPodcasts()
         }
     }
 }
+
+
 
 struct PodcastCardView: View {
     @State private var podcastImage: UIImage?
@@ -168,25 +164,29 @@ struct PodcastCardView: View {
 
     var body: some View {
         VStack {
-            if let image = podcastImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 120, height: 120)
-                    .cornerRadius(10)
-            } else {
-                Image(systemName: "mic.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
-                    .foregroundColor(.gray)
+            Group {
+                if let image = podcastImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 120, height: 120)
+                        .cornerRadius(10)
+                } else {
+                    Image(systemName: "mic.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 50, height: 50)
+                        .foregroundColor(.gray)
+                }
             }
+            .frame(height: 120)
 
             Text(podcast.name)
                 .font(.headline)
                 .foregroundColor(.primary)
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
+                .padding(.horizontal, 4)
         }
         .frame(height: 200)
         .background(Color.gray.opacity(0.2))
