@@ -3,6 +3,7 @@ import MediaPlayer
 import MusicKit
 
 // Klasse zur Überprüfung der Apple Music- und MusicKit-Autorisierung
+@MainActor
 class AuthorizationChecker: ObservableObject {
     // Veröffentlichte Variablen zur Überwachung der Autorisierungszustände
     @Published var isAuthorized: Bool = false

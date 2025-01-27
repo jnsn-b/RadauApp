@@ -8,23 +8,17 @@
  Der PodcastStore fungiert somit als wichtige Vermittlerschicht zwischen der Datenpersistenz (PodcastInfoHandler) und der Benutzeroberfläche, was die Architektur der App verbessert.
  */
 
- import SwiftUI
+import Foundation
 
 class PodcastStore: ObservableObject {
     @Published var podcasts: [PodcastFetcher.Podcast] = []
-    
+
     func loadPodcasts() {
         Task {
-            let loadedPodcasts = await PodcastInfoHandler.getPodcasts()
+            let savedPodcasts = await PodcastInfoHandler.getPodcasts()
             DispatchQueue.main.async {
-                self.podcasts = loadedPodcasts
+                self.podcasts = savedPodcasts
             }
-        }
-    }
-    
-    func addPodcast(_ podcast: PodcastFetcher.Podcast) {
-        DispatchQueue.main.async {
-            self.podcasts.append(podcast)
         }
     }
 }

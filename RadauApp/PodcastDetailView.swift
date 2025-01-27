@@ -3,14 +3,15 @@ import SwiftUI
 
 struct PodcastDetailView: View {
     
-    @State private var podcast: PodcastFetcher.Podcast
+    @State var podcast: PodcastFetcher.Podcast // ✅ Jetzt als Binding, wenn es aus MainView kommt
     @State private var episodes: [PodcastFetcher.PodcastEpisode] = []
     @StateObject private var podcastPlayer = PodcastPlayer()
     @State private var isPlaying: Bool = false
-
-    init(initialPodcast: PodcastFetcher.Podcast) {
-        _podcast = State(initialValue: initialPodcast)
-    }
+    @ObservedObject var podcastFetcher: PodcastFetcher // ✅ PodcastFetcher als Instanz übergeben
+    
+    init(podcast: PodcastFetcher.Podcast, podcastFetcher: PodcastFetcher) {
+            self._podcast = State(initialValue: podcast) // ✅ Direkt zuweisen
+        self.podcastFetcher = podcastFetcher  }
 
     var body: some View {
         VStack {
@@ -33,7 +34,10 @@ struct PodcastDetailView: View {
 
     private var podcastArtwork: some View {
         Group {
-            if let data = podcast.artworkData, let image = UIImage(data: data) {
+            if let artworkPath = podcast.artworkFilePath,
+               FileManager.default.fileExists(atPath: artworkPath),
+               let imageData = try? Data(contentsOf: URL(fileURLWithPath: artworkPath)),
+               let image = UIImage(data: imageData) {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
@@ -116,9 +120,12 @@ struct PodcastDetailView: View {
     }
 
     private func fetchEpisodes() {
-        PodcastFetcher.fetchEpisodes(from: podcast.rssFeedURL, podcast: podcast) { updatedPodcast, fetchedEpisodes in
-            self.episodes = fetchedEpisodes
-            self.podcast = updatedPodcast
+        Task {
+            let fetchedEpisodes = await podcastFetcher.fetchEpisodes(from: podcast.feedURL, podcast: podcast) // ✅ Instanz-Aufruf mit `await`
+
+            DispatchQueue.main.async {
+                self.episodes = fetchedEpisodes
+            }
         }
     }
 }

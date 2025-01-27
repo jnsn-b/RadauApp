@@ -3,6 +3,7 @@ import UIKit
 import Foundation
 import MediaPlayer
 
+
 struct MainView: View {
     @State private var selectedTab: Int = 0
     @StateObject private var authChecker = AuthorizationChecker()
@@ -16,6 +17,12 @@ struct MainView: View {
     @State private var selectedPodcastTitle: String? = nil
     @State private var podcastImageData: Data? = nil
     @StateObject private var podcastStore = PodcastStore()
+    @ObservedObject private var radioFetcher = RadioFetcher()
+    @State private var showAddRadioDialog: Bool = false
+    @State private var selectedRadio: Radio? = nil
+    @State var currentRadio: Radio? = nil
+    @State private var currentRadioID: String? = nil
+
 
     
     let columns = [
@@ -38,15 +45,19 @@ struct MainView: View {
                     VStack {
                         Picker("Kategorie", selection: $selectedTab) {
                             Text("🎵 Musik").tag(0)
-                            Text("🎙️ Shows").tag(1)
+                            Text("🎙️ Podcasts").tag(1)
+                            Text("📻 Radio").tag(2)
+                            
                         }
                         .pickerStyle(SegmentedPickerStyle())
                         .padding()
                         
                         if selectedTab == 0 {
                             musicView()
+                        } else if selectedTab == 1 {
+                            PodcastView(podcastStore: podcastStore, podcastFetcher: podcastFetcher)
                         } else {
-                            PodcastView(podcastStore: podcastStore)
+                            radioView(radioFetcher: radioFetcher, showAddRadioDialog: $showAddRadioDialog, currentRadio: $currentRadio, currentRadioID: $currentRadioID)
                         }
                     }
                     .navigationBarTitleDisplayMode(.inline)
@@ -98,19 +109,37 @@ struct MainView: View {
     }
     
     func loadPodcastEpisodes(for podcast: PodcastFetcher.Podcast) {
-        print("Versuche, Episoden für Podcast mit URL: \(podcast.rssFeedURL) zu laden")
+        print("Versuche, Episoden für Podcast mit URL: \(podcast.feedURL) zu laden")
 
-        PodcastFetcher.fetchEpisodes(from: podcast.rssFeedURL, podcast: podcast) { updatedPodcast, fetchedEpisodes in
-            print("Episoden geladen: \(fetchedEpisodes.count)")
-            self.episodes = fetchedEpisodes
-            self.podcastImageData = updatedPodcast.artworkData
-            self.selectedPodcastTitle = updatedPodcast.name
+        Task {
+            let fetchedEpisodes = await podcastFetcher.fetchEpisodes(from: podcast.feedURL, podcast: podcast) // ✅ Instanz-Aufruf mit `await`
+
+            DispatchQueue.main.async {
+                print("Episoden geladen: \(fetchedEpisodes.count)")
+                self.episodes = fetchedEpisodes
+
+                // ✅ Falls ein Bildpfad existiert, lade das Bild aus dem Dateisystem
+                if let artworkPath = podcast.artworkFilePath {
+                    do {
+                        let imageData = try Data(contentsOf: URL(fileURLWithPath: artworkPath))
+                        self.podcastImageData = imageData
+                    } catch {
+                        print("❌ Fehler beim Laden des Bildes: \(error)")
+                        self.podcastImageData = nil
+                    }
+                } else {
+                    self.podcastImageData = nil
+                }
+
+                self.selectedPodcastTitle = podcast.name
+            }
         }
     }
 }
 
 struct PodcastView: View {
     @ObservedObject var podcastStore: PodcastStore
+    @ObservedObject var podcastFetcher: PodcastFetcher
     @State private var showAddPodcastDialog = false
     
     let columns = [GridItem(.adaptive(minimum: 150))]
@@ -137,7 +166,7 @@ struct PodcastView: View {
                     Text("Keine Podcasts gefunden.")
                 } else {
                     ForEach(podcastStore.podcasts, id: \.id) { podcast in
-                        NavigationLink(destination: PodcastDetailView(initialPodcast: podcast)) {
+                        NavigationLink(destination: PodcastDetailView(podcast: podcast, podcastFetcher: podcastFetcher)) { // ✅ podcastFetcher übergeben 
                             PodcastCardView(podcast: podcast)
                         }
                     }
@@ -147,7 +176,7 @@ struct PodcastView: View {
         }
         .background(ScreenPainter.backgroundColor.edgesIgnoringSafeArea(.all))
         .sheet(isPresented: $showAddPodcastDialog) {
-            AddPodcastView(showAddPodcastDialog: $showAddPodcastDialog)
+            PodcastAddView(showAddPodcastDialog: $showAddPodcastDialog, podcastFetcher: podcastFetcher)
         }
 
         .onAppear {
@@ -161,18 +190,20 @@ struct PodcastView: View {
 struct PodcastCardView: View {
     @State private var podcastImage: UIImage?
     let podcast: PodcastFetcher.Podcast
-
+    
     var body: some View {
         VStack {
             Group {
-                if let image = podcastImage {
+                if let artworkPath = podcast.artworkFilePath,
+                   let imageData = try? Data(contentsOf: URL(fileURLWithPath: artworkPath)),
+                   let image = UIImage(data: imageData) {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 120, height: 120)
+                        .frame(width: 100, height: 100)
                         .cornerRadius(10)
                 } else {
-                    Image(systemName: "mic.fill")
+                    Image(systemName: "mic.fill") // Fallback-Icon
                         .resizable()
                         .scaledToFit()
                         .frame(width: 50, height: 50)
@@ -180,7 +211,7 @@ struct PodcastCardView: View {
                 }
             }
             .frame(height: 120)
-
+            
             Text(podcast.name)
                 .font(.headline)
                 .foregroundColor(.primary)
@@ -195,12 +226,90 @@ struct PodcastCardView: View {
             loadPic()
         }
     }
-
+    
     private func loadPic() {
         PodcastFetcher.loadPodcastArtwork(for: podcast) { image in
             DispatchQueue.main.async {
                 self.podcastImage = image
             }
         }
+    }
+}
+
+    
+    
+func radioView(radioFetcher: RadioFetcher, showAddRadioDialog: Binding<Bool>, currentRadio: Binding<Radio?>, currentRadioID: Binding<String?>) -> some View {
+    
+    return ScrollView {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))], spacing: 20) {
+            Button(action: { showAddRadioDialog.wrappedValue = true }) {
+                VStack {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                    Text("Neuen Sender hinzufügen")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                }
+                .frame(height: 200)
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(10)
+            }
+
+            ForEach(radioFetcher.radios, id: \.id) { radio in
+                NavigationLink(
+                    destination: RadioDetailView(radio: radio),
+                    tag: radio.id,
+                    selection: currentRadioID // ✅ Übergebene Variable verwenden
+                ) {
+                    VStack {
+                        if let artworkPath = radio.artworkFilePath,
+                           let imageData = try? Data(contentsOf: URL(fileURLWithPath: artworkPath)),
+                           let image = UIImage(data: imageData) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 80, height: 80)
+                                .cornerRadius(10)
+                        } else {
+                            Image(systemName: "antenna.radiowaves.left.and.right") // Fallback-Icon
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 50, height: 50)
+                                .foregroundColor(.gray)
+                        }
+
+                        Text(radio.name)
+                            .font(.headline)
+                            .padding(.top, 5)
+                    }
+                    .frame(height: 100)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+                    .onTapGesture {
+                            handleRadioTap(radio, currentRadio: currentRadio, currentRadioID: currentRadioID)
+                        
+                    }
+                }
+            }
+                               }
+                               .padding()
+                           }
+                           .onAppear {
+                               Task {
+                                   await radioFetcher.fetchRadios()
+                               }
+                           }
+                           .sheet(isPresented: showAddRadioDialog) {
+                               RadioAddView(showAddRadioDialog: showAddRadioDialog, radioFetcher: radioFetcher)
+                           }
+                       }
+
+func handleRadioTap(_ radio: Radio, currentRadio: Binding<Radio?>, currentRadioID: Binding<String?>) {
+    Task {
+        currentRadio.wrappedValue = radio
+        currentRadioID.wrappedValue = radio.id
+        RadioPlayer.shared.play(radio: radio)
     }
 }
