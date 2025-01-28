@@ -38,32 +38,40 @@ class PlaylistImageHandler {
     // Speichern des Bildes im Dateisystem und in UserDefaults
     func saveImage(_ image: UIImage, for playlistID: UInt64) {
         let resizedImage = resizeImage(image: image, targetSize: CGSize(width: 80, height: 80))
-        let url = imagePath(for: playlistID)
+        let fileName = "\(playlistID).png" // Der Dateiname
+        let url = getDocumentsDirectory().appendingPathComponent(fileName) // Der vollständige Pfad für Speicherung
 
         if let data = resizedImage.pngData() {
             try? data.write(to: url)
 
-            // Convert playlistID to String for storage in UserDefaults
+            // Speichern nur des Dateinamens in UserDefaults
             var savedPaths = UserDefaults.standard.dictionary(forKey: "playlistImages") as? [String: String] ?? [:]
-            savedPaths[String(playlistID)] = url.path
+            savedPaths[String(playlistID)] = fileName  // Speichern nur des Dateinamens, nicht des kompletten Pfads
             UserDefaults.standard.set(savedPaths, forKey: "playlistImages")
         }
     }
 
-    // Laden des Bildes
-    func loadImage(for playlistID: UInt64) -> UIImage? {
-        let url = imagePath(for: playlistID)
-        return UIImage(contentsOfFile: url.path)
-    }
 
     // Alle gespeicherten Bilder laden
     func loadAllImages() -> [UInt64: UIImage] {
         var images: [UInt64: UIImage] = [:]
+        
+        // Holen der gespeicherten Pfade aus UserDefaults
         let savedPaths = UserDefaults.standard.dictionary(forKey: "playlistImages") as? [String: String] ?? [:]
 
-        for (key, path) in savedPaths {
-            if let playlistID = UInt64(key), let image = UIImage(contentsOfFile: path) {
-                images[playlistID] = image
+        // Base-URL für das Documents-Verzeichnis
+        let documentsDirectory = getDocumentsDirectory()
+
+        for (key, fileName) in savedPaths {
+            if let playlistID = UInt64(key) {
+                // Rekonstruiere den vollständigen Pfad, indem nur der Dateiname genutzt wird
+                let filePath = documentsDirectory.appendingPathComponent(fileName)
+
+                if let image = UIImage(contentsOfFile: filePath.path) {
+                    images[playlistID] = image
+                } else {
+                    print("❌ Bild für Playlist \(playlistID) konnte nicht geladen werden: \(filePath.path)")
+                }
             }
         }
 

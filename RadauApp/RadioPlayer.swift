@@ -7,23 +7,11 @@ class RadioPlayer: ObservableObject {
     @Published var isPlaying: Bool = false
     @Published var currentRadio: Radio?
 
-    init() {
-        configureAudioSession()
-    }
-
-    /// Konfiguriert die Audio-Session für Hintergrundwiedergabe
-    private func configureAudioSession() {
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
-            try AVAudioSession.sharedInstance().setActive(true)
-            print("🎵 Audio-Session erfolgreich aktiviert")
-        } catch {
-            print("❌ Fehler beim Aktivieren der Audio-Session: \(error)")
-        }
-    }
+   
 
     /// Startet das Radio-Streaming
     func play(radio: Radio) {
+        AudioSessionManager.shared.activateAVPlayerSession()
         var streamURL = radio.streamURL
 
         // Falls HTTP-Stream existiert, versuche HTTPS, falls ATS es erlaubt

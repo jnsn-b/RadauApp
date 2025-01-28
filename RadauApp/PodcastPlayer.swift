@@ -6,46 +6,38 @@ class PodcastPlayer: ObservableObject {
     @Published var currentEpisode: PodcastFetcher.PodcastEpisode? // Verwende den Typ aus PodcastFetcher
     var player: AVPlayer?
 
-    init() {
-        // Setze die Audio-Sitzung, um die Hintergrundwiedergabe zu ermöglichen
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
-        } catch {
-            print("Fehler beim Konfigurieren der AVAudioSession: \(error)")
-        }
-    }
+   
+func play(episode: PodcastFetcher.PodcastEpisode) {
+                // Falls bereits eine Episode läuft, stoppe sie zuerst
+                if let currentEpisode = currentEpisode {
+                    print("🛑 Stoppe vorherige Episode: \(currentEpisode.title)")
+                    stop()
+                }
 
-    // Funktion, um eine Episode abzuspielen
-    func play(episode: PodcastFetcher.PodcastEpisode) {
-        self.currentEpisode = episode
-        print("Spiele Episode: \(episode.title), URL: \(episode.playbackURL)") // Debug-Ausgabe
+                // Setze die aktuelle Episode
+                self.currentEpisode = episode
+                print("▶️ Spiele Episode: \(episode.title), URL: \(episode.playbackURL)")
 
-        // Falls eine gültige URL für die Episode vorhanden ist
-        if let url = URL(string: episode.playbackURL) {
-            print("Gültige URL: \(url)")
-            
-            // Lade und spiele direkt ab
-            playStream(url: url)
-        } else {
-            print("Keine gültige URL für die Episode.")
-        }
-    }
+                // Stelle sicher, dass die Audio-Session aktiv ist
+                AudioSessionManager.shared.activateAVPlayerSession()
 
-    private func playStream(url: URL) {
-        // Erstelle ein AVAsset direkt aus der URL
-        let asset = AVAsset(url: url)
-        
-        // Erstelle einen AVPlayerItem aus dem Asset
-        let playerItem = AVPlayerItem(asset: asset)
-        
-        // AVPlayer initialisieren
-        self.player = AVPlayer(playerItem: playerItem)
-        
-        // Starte die Wiedergabe
-        self.player?.play()
-        print("AVPlayer gestartet mit Stream URL: \(url)")
-    }
+                // Überprüfe, ob die URL gültig ist
+                guard let url = URL(string: episode.playbackURL) else {
+                    print("❌ Ungültige URL für die Episode: \(episode.title)")
+                    return
+                }
+
+                print("🔗 Lade Stream von: \(url)")
+
+                // AVPlayer initialisieren und starten
+                let playerItem = AVPlayerItem(url: url)
+                self.player = AVPlayer(playerItem: playerItem)
+
+                // Beginne mit der Wiedergabe
+                self.player?.play()
+            }
+
+
 
     // Funktion, um zur nächsten Episode zu wechseln (falls vorhanden)
     func next(episodes: [PodcastFetcher.PodcastEpisode], currentEpisode: PodcastFetcher.PodcastEpisode) {

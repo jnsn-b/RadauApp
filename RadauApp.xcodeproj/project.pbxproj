@@ -23,6 +23,7 @@
 		4EAEB9B72D4773F400929BEA /* RadioDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEB9B62D4773ED00929BEA /* RadioDetailView.swift */; };
 		4EAEB9B92D47741400929BEA /* RadioAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEB9B82D47740300929BEA /* RadioAddView.swift */; };
 		4EAEB9BB2D47791E00929BEA /* RadioInfoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEB9BA2D47791A00929BEA /* RadioInfoHandler.swift */; };
+		4EAEB9BD2D47E66A00929BEA /* AudioSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEB9BC2D47E66800929BEA /* AudioSessionManager.swift */; };
 		4EBD6B6B2C6DF49D0072A639 /* RadauApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B6A2C6DF49D0072A639 /* RadauApp.swift */; };
 		4EBD6B6D2C6DF4B10072A639 /* AuthorizationChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */; };
 		4EBD6B702C6DF4CA0072A639 /* ScreenPainter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B6F2C6DF4CA0072A639 /* ScreenPainter.swift */; };
@@ -78,6 +79,7 @@
 		4EAEB9B62D4773ED00929BEA /* RadioDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioDetailView.swift; sourceTree = "<group>"; };
 		4EAEB9B82D47740300929BEA /* RadioAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioAddView.swift; sourceTree = "<group>"; };
 		4EAEB9BA2D47791A00929BEA /* RadioInfoHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioInfoHandler.swift; sourceTree = "<group>"; };
+		4EAEB9BC2D47E66800929BEA /* AudioSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionManager.swift; sourceTree = "<group>"; };
 		4EBD6B6A2C6DF49D0072A639 /* RadauApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadauApp.swift; sourceTree = "<group>"; };
 		4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationChecker.swift; sourceTree = "<group>"; };
 		4EBD6B6F2C6DF4CA0072A639 /* ScreenPainter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenPainter.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 		4EBD6B692C6DF47B0072A639 /* RadauApp */ = {
 			isa = PBXGroup;
 			children = (
+				4EAEB9BC2D47E66800929BEA /* AudioSessionManager.swift */,
 				4EBD6B7B2C6DF9740072A639 /* Assets.xcassets */,
 				4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */,
 				4EBD6B8B2C6EA4E40072A639 /* Color.swift */,
@@ -353,6 +356,7 @@
 				4EBD6B8C2C6EA4E40072A639 /* Color.swift in Sources */,
 				4EBD6B952C6FA1270072A639 /* PhotoPickerView.swift in Sources */,
 				4EBD6B762C6DF50A0072A639 /* PlaylistDetailView.swift in Sources */,
+				4EAEB9BD2D47E66A00929BEA /* AudioSessionManager.swift in Sources */,
 				4EBD6B812C6DFCAA0072A639 /* PlaylistFetcher.swift in Sources */,
 				4EBD6B722C6DF4DB0072A639 /* MusicPlayer.swift in Sources */,
 				4EAEB9B12D4773A700929BEA /* Radio.swift in Sources */,
