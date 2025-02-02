@@ -12,35 +12,31 @@
 		4E5B172E2C6CD6A50078948F /* RadauAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5B172D2C6CD6A50078948F /* RadauAppUITestsLaunchTests.swift */; };
 		4E8C0E262D40DBBB00BCF53E /* PodcastFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C0E252D40DBB400BCF53E /* PodcastFetcher.swift */; };
 		4E8C0E282D40E4A900BCF53E /* PodcastDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C0E272D40E4A400BCF53E /* PodcastDetailView.swift */; };
-		4E8C0E2A2D40EB3F00BCF53E /* PodcastPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C0E292D40EB3900BCF53E /* PodcastPlayer.swift */; };
 		4E8C0E2C2D410C4900BCF53E /* PodcastInfoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C0E2B2D410C3C00BCF53E /* PodcastInfoHandler.swift */; };
 		4E8C0E2F2D410D1500BCF53E /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4E8C0E2E2D410D1500BCF53E /* FeedKit */; };
 		4E8C0E312D4183CD00BCF53E /* PodcastAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8C0E302D4183BE00BCF53E /* PodcastAddView.swift */; };
 		4EAEB9AF2D4627BD00929BEA /* PodcastStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEB9AE2D4627BD00929BEA /* PodcastStore.swift */; };
 		4EAEB9B12D4773A700929BEA /* Radio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEB9B02D47739C00929BEA /* Radio.swift */; };
 		4EAEB9B32D4773C700929BEA /* RadioFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEB9B22D4773BC00929BEA /* RadioFetcher.swift */; };
-		4EAEB9B52D4773DF00929BEA /* RadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEB9B42D4773D200929BEA /* RadioPlayer.swift */; };
-		4EAEB9B72D4773F400929BEA /* RadioDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEB9B62D4773ED00929BEA /* RadioDetailView.swift */; };
 		4EAEB9B92D47741400929BEA /* RadioAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEB9B82D47740300929BEA /* RadioAddView.swift */; };
 		4EAEB9BB2D47791E00929BEA /* RadioInfoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEB9BA2D47791A00929BEA /* RadioInfoHandler.swift */; };
 		4EAEB9BD2D47E66A00929BEA /* AudioSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAEB9BC2D47E66800929BEA /* AudioSessionManager.swift */; };
 		4EBD6B6B2C6DF49D0072A639 /* RadauApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B6A2C6DF49D0072A639 /* RadauApp.swift */; };
 		4EBD6B6D2C6DF4B10072A639 /* AuthorizationChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */; };
 		4EBD6B702C6DF4CA0072A639 /* ScreenPainter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B6F2C6DF4CA0072A639 /* ScreenPainter.swift */; };
-		4EBD6B722C6DF4DB0072A639 /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B712C6DF4DB0072A639 /* MusicPlayer.swift */; };
 		4EBD6B742C6DF4FA0072A639 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B732C6DF4FA0072A639 /* MainView.swift */; };
 		4EBD6B762C6DF50A0072A639 /* PlaylistDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B752C6DF50A0072A639 /* PlaylistDetailView.swift */; };
 		4EBD6B7E2C6DF9740072A639 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EBD6B7B2C6DF9740072A639 /* Assets.xcassets */; };
 		4EBD6B7F2C6DF9740072A639 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EBD6B7C2C6DF9740072A639 /* Preview Assets.xcassets */; };
 		4EBD6B812C6DFCAA0072A639 /* PlaylistFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B802C6DFCAA0072A639 /* PlaylistFetcher.swift */; };
-		4EBD6B862C6E06FC0072A639 /* MusicPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B852C6E06FC0072A639 /* MusicPlayerView.swift */; };
 		4EBD6B882C6E0C900072A639 /* DeviceRotationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B872C6E0C900072A639 /* DeviceRotationExtension.swift */; };
-		4EBD6B8A2C6E27970072A639 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B892C6E27970072A639 /* MiniPlayerView.swift */; };
 		4EBD6B8C2C6EA4E40072A639 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B8B2C6EA4E40072A639 /* Color.swift */; };
 		4EBD6B8F2C6F8B500072A639 /* ITCKRIST.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 4EBD6B8E2C6F8B500072A639 /* ITCKRIST.TTF */; };
 		4EBD6B952C6FA1270072A639 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B942C6FA1270072A639 /* PhotoPickerView.swift */; };
 		4EBD6B972C6FA4D50072A639 /* PlaylistImageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBD6B962C6FA4D50072A639 /* PlaylistImageHandler.swift */; };
-		4EE81A6C2C73D7CE00F2EF41 /* MiniPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE81A6B2C73D7CE00F2EF41 /* MiniPlayerManager.swift */; };
+		4ED2D3202D4AD14A001609C4 /* AudioPlayerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2D31E2D4AD14A001609C4 /* AudioPlayerProtocol.swift */; };
+		4ED2D3232D4AD339001609C4 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2D3222D4AD338001609C4 /* AudioPlayer.swift */; };
+		4ED2D3252D4AD5AB001609C4 /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2D3242D4AD5A2001609C4 /* AudioPlayerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,35 +65,31 @@
 		4E5B172D2C6CD6A50078948F /* RadauAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadauAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		4E8C0E252D40DBB400BCF53E /* PodcastFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastFetcher.swift; sourceTree = "<group>"; };
 		4E8C0E272D40E4A400BCF53E /* PodcastDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastDetailView.swift; sourceTree = "<group>"; };
-		4E8C0E292D40EB3900BCF53E /* PodcastPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastPlayer.swift; sourceTree = "<group>"; };
 		4E8C0E2B2D410C3C00BCF53E /* PodcastInfoHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastInfoHandler.swift; sourceTree = "<group>"; };
 		4E8C0E302D4183BE00BCF53E /* PodcastAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastAddView.swift; sourceTree = "<group>"; };
 		4EAEB9AE2D4627BD00929BEA /* PodcastStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastStore.swift; sourceTree = "<group>"; };
 		4EAEB9B02D47739C00929BEA /* Radio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Radio.swift; sourceTree = "<group>"; };
 		4EAEB9B22D4773BC00929BEA /* RadioFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioFetcher.swift; sourceTree = "<group>"; };
-		4EAEB9B42D4773D200929BEA /* RadioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioPlayer.swift; sourceTree = "<group>"; };
-		4EAEB9B62D4773ED00929BEA /* RadioDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioDetailView.swift; sourceTree = "<group>"; };
 		4EAEB9B82D47740300929BEA /* RadioAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioAddView.swift; sourceTree = "<group>"; };
 		4EAEB9BA2D47791A00929BEA /* RadioInfoHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioInfoHandler.swift; sourceTree = "<group>"; };
 		4EAEB9BC2D47E66800929BEA /* AudioSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionManager.swift; sourceTree = "<group>"; };
 		4EBD6B6A2C6DF49D0072A639 /* RadauApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadauApp.swift; sourceTree = "<group>"; };
 		4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationChecker.swift; sourceTree = "<group>"; };
 		4EBD6B6F2C6DF4CA0072A639 /* ScreenPainter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenPainter.swift; sourceTree = "<group>"; };
-		4EBD6B712C6DF4DB0072A639 /* MusicPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
 		4EBD6B732C6DF4FA0072A639 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		4EBD6B752C6DF50A0072A639 /* PlaylistDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistDetailView.swift; sourceTree = "<group>"; };
 		4EBD6B7B2C6DF9740072A639 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "PoC-Archiv/Assets.xcassets"; sourceTree = SOURCE_ROOT; };
 		4EBD6B7C2C6DF9740072A639 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		4EBD6B802C6DFCAA0072A639 /* PlaylistFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistFetcher.swift; sourceTree = "<group>"; };
-		4EBD6B852C6E06FC0072A639 /* MusicPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerView.swift; sourceTree = "<group>"; };
 		4EBD6B872C6E0C900072A639 /* DeviceRotationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceRotationExtension.swift; sourceTree = "<group>"; };
-		4EBD6B892C6E27970072A639 /* MiniPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
 		4EBD6B8B2C6EA4E40072A639 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		4EBD6B8D2C6F83680072A639 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4EBD6B8E2C6F8B500072A639 /* ITCKRIST.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = ITCKRIST.TTF; sourceTree = "<group>"; };
 		4EBD6B942C6FA1270072A639 /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
 		4EBD6B962C6FA4D50072A639 /* PlaylistImageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistImageHandler.swift; sourceTree = "<group>"; };
-		4EE81A6B2C73D7CE00F2EF41 /* MiniPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerManager.swift; sourceTree = "<group>"; };
+		4ED2D31E2D4AD14A001609C4 /* AudioPlayerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerProtocol.swift; sourceTree = "<group>"; };
+		4ED2D3222D4AD338001609C4 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		4ED2D3242D4AD5A2001609C4 /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
 		4EE81A6D2C73E78E00F2EF41 /* RadauApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RadauApp.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -167,18 +159,17 @@
 		4EBD6B692C6DF47B0072A639 /* RadauApp */ = {
 			isa = PBXGroup;
 			children = (
-				4EAEB9BC2D47E66800929BEA /* AudioSessionManager.swift */,
 				4EBD6B7B2C6DF9740072A639 /* Assets.xcassets */,
+				4ED2D3222D4AD338001609C4 /* AudioPlayer.swift */,
+				4ED2D3242D4AD5A2001609C4 /* AudioPlayerView.swift */,
+				4ED2D31E2D4AD14A001609C4 /* AudioPlayerProtocol.swift */,
+				4EAEB9BC2D47E66800929BEA /* AudioSessionManager.swift */,
 				4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */,
 				4EBD6B8B2C6EA4E40072A639 /* Color.swift */,
 				4EBD6B872C6E0C900072A639 /* DeviceRotationExtension.swift */,
 				4EBD6B8D2C6F83680072A639 /* Info.plist */,
 				4EBD6B8E2C6F8B500072A639 /* ITCKRIST.TTF */,
 				4EBD6B732C6DF4FA0072A639 /* MainView.swift */,
-				4EE81A6B2C73D7CE00F2EF41 /* MiniPlayerManager.swift */,
-				4EBD6B892C6E27970072A639 /* MiniPlayerView.swift */,
-				4EBD6B712C6DF4DB0072A639 /* MusicPlayer.swift */,
-				4EBD6B852C6E06FC0072A639 /* MusicPlayerView.swift */,
 				4EBD6B942C6FA1270072A639 /* PhotoPickerView.swift */,
 				4EBD6B752C6DF50A0072A639 /* PlaylistDetailView.swift */,
 				4EBD6B802C6DFCAA0072A639 /* PlaylistFetcher.swift */,
@@ -187,17 +178,14 @@
 				4E8C0E272D40E4A400BCF53E /* PodcastDetailView.swift */,
 				4E8C0E252D40DBB400BCF53E /* PodcastFetcher.swift */,
 				4E8C0E2B2D410C3C00BCF53E /* PodcastInfoHandler.swift */,
-				4E8C0E292D40EB3900BCF53E /* PodcastPlayer.swift */,
 				4EAEB9AE2D4627BD00929BEA /* PodcastStore.swift */,
 				4EBD6B7D2C6DF9740072A639 /* Preview Content */,
 				4EE81A6D2C73E78E00F2EF41 /* RadauApp.entitlements */,
 				4EBD6B6A2C6DF49D0072A639 /* RadauApp.swift */,
 				4EAEB9B02D47739C00929BEA /* Radio.swift */,
 				4EAEB9B82D47740300929BEA /* RadioAddView.swift */,
-				4EAEB9B62D4773ED00929BEA /* RadioDetailView.swift */,
 				4EAEB9B22D4773BC00929BEA /* RadioFetcher.swift */,
 				4EAEB9BA2D47791A00929BEA /* RadioInfoHandler.swift */,
-				4EAEB9B42D4773D200929BEA /* RadioPlayer.swift */,
 				4EBD6B6F2C6DF4CA0072A639 /* ScreenPainter.swift */,
 			);
 			path = RadauApp;
@@ -346,31 +334,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4ED2D3252D4AD5AB001609C4 /* AudioPlayerView.swift in Sources */,
+				4ED2D3202D4AD14A001609C4 /* AudioPlayerProtocol.swift in Sources */,
 				4EBD6B882C6E0C900072A639 /* DeviceRotationExtension.swift in Sources */,
 				4EBD6B742C6DF4FA0072A639 /* MainView.swift in Sources */,
 				4E8C0E262D40DBBB00BCF53E /* PodcastFetcher.swift in Sources */,
 				4EBD6B6D2C6DF4B10072A639 /* AuthorizationChecker.swift in Sources */,
-				4EBD6B8A2C6E27970072A639 /* MiniPlayerView.swift in Sources */,
-				4EAEB9B72D4773F400929BEA /* RadioDetailView.swift in Sources */,
+				4ED2D3232D4AD339001609C4 /* AudioPlayer.swift in Sources */,
 				4E8C0E2C2D410C4900BCF53E /* PodcastInfoHandler.swift in Sources */,
 				4EBD6B8C2C6EA4E40072A639 /* Color.swift in Sources */,
 				4EBD6B952C6FA1270072A639 /* PhotoPickerView.swift in Sources */,
 				4EBD6B762C6DF50A0072A639 /* PlaylistDetailView.swift in Sources */,
 				4EAEB9BD2D47E66A00929BEA /* AudioSessionManager.swift in Sources */,
 				4EBD6B812C6DFCAA0072A639 /* PlaylistFetcher.swift in Sources */,
-				4EBD6B722C6DF4DB0072A639 /* MusicPlayer.swift in Sources */,
 				4EAEB9B12D4773A700929BEA /* Radio.swift in Sources */,
 				4EBD6B702C6DF4CA0072A639 /* ScreenPainter.swift in Sources */,
 				4E8C0E312D4183CD00BCF53E /* PodcastAddView.swift in Sources */,
-				4EBD6B862C6E06FC0072A639 /* MusicPlayerView.swift in Sources */,
-				4EE81A6C2C73D7CE00F2EF41 /* MiniPlayerManager.swift in Sources */,
 				4EBD6B6B2C6DF49D0072A639 /* RadauApp.swift in Sources */,
 				4EAEB9AF2D4627BD00929BEA /* PodcastStore.swift in Sources */,
 				4EAEB9B92D47741400929BEA /* RadioAddView.swift in Sources */,
 				4E8C0E282D40E4A900BCF53E /* PodcastDetailView.swift in Sources */,
 				4EBD6B972C6FA4D50072A639 /* PlaylistImageHandler.swift in Sources */,
-				4EAEB9B52D4773DF00929BEA /* RadioPlayer.swift in Sources */,
-				4E8C0E2A2D40EB3F00BCF53E /* PodcastPlayer.swift in Sources */,
 				4EAEB9BB2D47791E00929BEA /* RadioInfoHandler.swift in Sources */,
 				4EAEB9B32D4773C700929BEA /* RadioFetcher.swift in Sources */,
 			);

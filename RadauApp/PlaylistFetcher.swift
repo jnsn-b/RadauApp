@@ -8,21 +8,24 @@ class PlaylistFetcher: ObservableObject {
     
     // Funktion zum Abrufen der Playlists aus der Media Library
     func fetchPlaylists() {
-        // Erstellen einer Abfrage, um alle Playlists abzurufen
-        let query = MPMediaQuery.playlists()
-        
-        // Überprüfen, ob die Abfrage gültige Playlists zurückgegeben hat
-        if let playlists = query.collections as? [MPMediaPlaylist] {
-            // Aktualisieren der veröffentlichten Eigenschaft auf dem Hauptthread
-            DispatchQueue.main.async {
-                self.playlists = playlists
-            }
-        } else {
-            // Fehlerbehandlung, falls keine Playlists gefunden wurden
-            DispatchQueue.main.async {
-                self.playlists = [] // Setzt die Playlists-Liste auf leer, falls keine gefunden werden
-            }
-        }
-    }
+           let query = MPMediaQuery.playlists()
+           
+           // ✅ Sicherstellen, dass `query.collections` gültig ist
+           guard let collections = query.collections else {
+               print("⚠️ Keine Playlists gefunden!")
+               self.playlists = []
+               return
+           }
+
+           // ✅ Sicherstellen, dass jede Collection wirklich eine MPMediaPlaylist ist
+           let validPlaylists = collections.compactMap { $0 as? MPMediaPlaylist }
+
+           // ✅ Herausfiltern von leeren Playlisten
+           let filteredPlaylists = validPlaylists.filter { $0.items.count > 0 }
+
+           DispatchQueue.main.async {
+               self.playlists = filteredPlaylists
+           }
+       }
 }
 

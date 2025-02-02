@@ -2,7 +2,6 @@ import SwiftUI
 
 struct RadioDetailView: View {
     let radio: Radio
-    @ObservedObject var radioPlayer = RadioPlayer()
 
     var body: some View {
         VStack {

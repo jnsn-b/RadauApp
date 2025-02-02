@@ -2,16 +2,17 @@ import MediaPlayer
 import SwiftUI
 
 struct PodcastDetailView: View {
-    
-    @State var podcast: PodcastFetcher.Podcast // ✅ Jetzt als Binding, wenn es aus MainView kommt
+    @EnvironmentObject var playerUI: PlayerUIState
+    @EnvironmentObject var audioPlayer: AudioPlayer
+    @Binding var podcast: PodcastFetcher.Podcast
     @State private var episodes: [PodcastFetcher.PodcastEpisode] = []
-    @StateObject private var podcastPlayer = PodcastPlayer()
     @State private var isPlaying: Bool = false
-    @ObservedObject var podcastFetcher: PodcastFetcher // ✅ PodcastFetcher als Instanz übergeben
-    
-    init(podcast: PodcastFetcher.Podcast, podcastFetcher: PodcastFetcher) {
-            self._podcast = State(initialValue: podcast) // ✅ Direkt zuweisen
-        self.podcastFetcher = podcastFetcher  }
+    @StateObject private var podcastFetcher = PodcastFetcher()
+
+    init(podcast: Binding<PodcastFetcher.Podcast>) {
+        self._podcast = podcast
+        fetchEpisodes()
+    }
 
     var body: some View {
         VStack {
@@ -23,13 +24,24 @@ struct PodcastDetailView: View {
                 .padding()
 
             episodesList
+            
 
-            playerControls
+            // ✅ `PlayerView` statt `playerControls`
+            if playerUI.showPlayer || audioPlayer.isPlaying {
+                PlayerView()
+                    .environmentObject(audioPlayer)
+                    .environmentObject(playerUI)
+                    .edgesIgnoringSafeArea(.bottom)
+            }
+            
         }
+        
         .onAppear(perform: fetchEpisodes)
-        .onChange(of: podcastPlayer.player?.timeControlStatus) { status in
-            isPlaying = status == .playing
+        .onChange(of: audioPlayer.isPlaying) { newValue in
+            isPlaying = newValue
+
         }
+        
     }
 
     private var podcastArtwork: some View {
@@ -66,62 +78,19 @@ struct PodcastDetailView: View {
                 Spacer()
             }
             .onTapGesture {
-                podcastPlayer.play(episode: episode)
+                
+                audioPlayer.playPodcast(episode: episode, podcast: podcast)
                 isPlaying = true
+                playerUI.showPlayer = true
             }
         }
-    }
-
-    private var playerControls: some View {
-        HStack {
-            Button(action: {
-                if let currentEpisode = podcastPlayer.currentEpisode {
-                    podcastPlayer.previous(episodes: episodes, currentEpisode: currentEpisode)
-                }
-            }) {
-                Image(systemName: "backward.fill")
-                    .resizable()
-                    .frame(width: 30, height: 30)
-                    .foregroundColor(.white)
-            }
-
-            Spacer()
-
-            Button(action: {
-                if isPlaying {
-                    podcastPlayer.player?.pause()
-                } else {
-                    podcastPlayer.player?.play()
-                }
-                isPlaying.toggle()
-            }) {
-                Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                    .resizable()
-                    .frame(width: 30, height: 30)
-                    .foregroundColor(.white)
-            }
-
-            Spacer()
-
-            Button(action: {
-                if let currentEpisode = podcastPlayer.currentEpisode {
-                    podcastPlayer.next(episodes: episodes, currentEpisode: currentEpisode)
-                }
-            }) {
-                Image(systemName: "forward.fill")
-                    .resizable()
-                    .frame(width: 30, height: 30)
-                    .foregroundColor(.white)
-            }
-        }
-        .padding()
-        .background(Color.black.opacity(0.7))
-        .cornerRadius(10)
+        
+       
     }
 
     private func fetchEpisodes() {
         Task {
-            let fetchedEpisodes = await podcastFetcher.fetchEpisodes(from: podcast.feedURL, podcast: podcast) // ✅ Instanz-Aufruf mit `await`
+            let fetchedEpisodes = await podcastFetcher.fetchEpisodes(from: podcast.feedURL, podcast: podcast)
 
             DispatchQueue.main.async {
                 self.episodes = fetchedEpisodes

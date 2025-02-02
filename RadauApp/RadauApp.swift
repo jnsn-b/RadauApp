@@ -3,7 +3,8 @@ import SwiftUI
 // Hauptanwendungseintragspunkt mit dem @main-Attribut
 @main
 struct RadauApp: App {
-
+    @StateObject private var audioPlayer = AudioPlayer()
+    @StateObject var playerUI = PlayerUIState()
     // Initialisierer für die App, um das Erscheinungsbild der Navigationsleiste zu konfigurieren
     init() {
         // Erstellung einer neuen UINavigationBarAppearance-Instanz
@@ -35,6 +36,8 @@ struct RadauApp: App {
         WindowGroup {
             // Einstiegspunkt der App, hier wird die MainView angezeigt
             MainView()
+                .environmentObject(audioPlayer)
+                .environmentObject(playerUI)
             
             
         }

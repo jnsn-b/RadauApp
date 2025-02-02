@@ -1,12 +1,11 @@
+import Foundation
 import SwiftUI
 import MediaPlayer
 
 /// Klasse zur Verwaltung der Benutzeroberfläche und des Farbschemas
 class ScreenPainter: ObservableObject {
     // MARK: - Properties
-    
-    /// Statische Instanz des MiniPlayerManagers
-    static let miniPlayerManager = MiniPlayerManager()
+    @EnvironmentObject var playerUI: PlayerUIState
     
     /// Published Property für Playlist-Bilder
     @Published var playlistImages: [UInt64: UIImage] = [:]
@@ -26,7 +25,14 @@ class ScreenPainter: ObservableObject {
     static var textColor: Color = .white
     
     /// Schriftart für Überschriften
-    static var titleFont: Font = .headline
+    static var titleFont: Font {
+        if let font = UIFont(name: "KristenITC-Regular", size: 24) {
+            return Font(font)
+        } else {
+            print("❌ Fehler: CustomFontName nicht gefunden, Standard-Schrift wird verwendet!")
+            return .title
+        }
+    }
     
     /// Schriftart für Fließtext
     static var bodyFont: Font = .body
@@ -131,20 +137,7 @@ class ScreenPainter: ObservableObject {
         return playlist.items.first?.artwork
     }
 
-    /// Rendert den Mini-Player
-    /// - Returns: Eine View mit dem Mini-Player oder eine leere View
-    static func renderMiniPlayer() -> some View {
-        Group {
-            if miniPlayerManager.showMiniPlayer {
-                MiniPlayerView(musicPlayer: miniPlayerManager.musicPlayer)
-                    .onTapGesture {
-                        miniPlayerManager.maximizePlayer()
-                    }
-                    .transition(.move(edge: .bottom))
-                    .animation(.easeInOut, value: miniPlayerManager.showMiniPlayer)
-            }
-        }
-    }
+   
     
     /// Generische Methode für Playlist-, Podcast- und Radio-Karten
     /// Generische Methode für Playlist-, Podcast- und Radio-Karten mit weißem Hintergrund
@@ -185,21 +178,19 @@ class ScreenPainter: ObservableObject {
     ///   - playlistFetcher: Der PlaylistFetcher zur Verwaltung der Playlists
     ///   - miniPlayerManager: Der MiniPlayerManager zur Steuerung des Players
     /// - Returns: Eine View mit der Musik-Ansicht
-    static func musicView(playlistFetcher: PlaylistFetcher, miniPlayerManager: MiniPlayerManager) -> some View {
+    static func musicView(playlistFetcher: PlaylistFetcher, audioPlayer: AudioPlayer) -> some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 40) {
                 ForEach(playlistFetcher.playlists, id: \.persistentID) { playlist in
                     playlistCardView(for: playlist)
                         .frame(height: 180)
                         .onTapGesture {
-                            DispatchQueue.main.async {
-                                miniPlayerManager.musicPlayer.setQueue(with: playlist.items)
-                                if let firstItem = playlist.items.first {
-                                    miniPlayerManager.musicPlayer.play(at: playlist.items.firstIndex(of: firstItem) ?? 0)
-                                    miniPlayerManager.maximizePlayer()
-                                }
-                            }
-                        }
+                                                audioPlayer.switchPlayer(toAppleMusic: true)
+                                                audioPlayer.setQueue(with: playlist.items)
+                                                if let firstItem = playlist.items.first {
+                                                    audioPlayer.play()
+                                                }
+                                            }
                 }
             }
             .padding()
@@ -218,7 +209,8 @@ class ScreenPainter: ObservableObject {
     static func podcastView(podcastStore: PodcastStore, podcastFetcher: PodcastFetcher, showAddPodcastDialog: Binding<Bool>) -> some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))], spacing: 40) {
-                Button(action: { podcastStore.loadPodcasts() }) {
+                // Button zum Hinzufügen eines neuen Podcasts
+                Button(action: { showAddPodcastDialog.wrappedValue = true }) {
                     VStack {
                         Image(systemName: "plus.circle.fill")
                             .font(.largeTitle)
@@ -234,10 +226,12 @@ class ScreenPainter: ObservableObject {
                 
                 if podcastStore.podcasts.isEmpty {
                     Text("Keine Podcasts gefunden.")
+                        .foregroundColor(.white)
                 } else {
                     ForEach(podcastStore.podcasts, id: \.id) { podcast in
-                        NavigationLink(destination: PodcastDetailView(podcast: podcast, podcastFetcher: podcastFetcher)) {
+                        NavigationLink(destination: PodcastDetailView(podcast: .constant(podcast))) {
                             podcastCardView(for: podcast)
+                        
                         }
                     }
                 }
@@ -245,6 +239,9 @@ class ScreenPainter: ObservableObject {
             .padding()
         }
         .background(ScreenPainter.backgroundColor.edgesIgnoringSafeArea(.all))
+        .sheet(isPresented: showAddPodcastDialog) {
+            PodcastAddView(showAddPodcastDialog: showAddPodcastDialog, podcastFetcher: podcastFetcher)
+        }
         .onAppear {
             podcastStore.loadPodcasts()
         }
@@ -257,7 +254,13 @@ class ScreenPainter: ObservableObject {
     ///   - currentRadio: Binding für den aktuell ausgewählten Radiosender
     ///   - currentRadioID: Binding für die ID des aktuell ausgewählten Radiosenders
     /// - Returns: Eine View mit der Radio-Ansicht
-    static func radioView(radioFetcher: RadioFetcher, showAddRadioDialog: Binding<Bool>, currentRadio: Binding<Radio?>, currentRadioID: Binding<String?>) -> some View {
+    static func radioView(
+        radioFetcher: RadioFetcher,
+        showAddRadioDialog: Binding<Bool>,
+        currentRadio: Binding<Radio?>,
+        currentRadioID: Binding<String?>,
+        audioPlayer: AudioPlayer
+    ) -> some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))], spacing: 40) {
                 Button(action: { showAddRadioDialog.wrappedValue = true }) {
@@ -273,19 +276,25 @@ class ScreenPainter: ObservableObject {
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(10)
                 }
+                .onTapGesture {
+                    showAddRadioDialog.wrappedValue = true
+                }
 
                 ForEach(radioFetcher.radios, id: \.id) { radio in
-                    NavigationLink(
-                        destination: RadioDetailView(radio: radio),
-                        tag: radio.id,
-                        selection: currentRadioID
-                    ) {
-                        radioCardView(for: radio)
-                    }
+                    Button(action: {
+                            audioPlayer.playRadio(radio: radio)
+                        }) {
+                            radioCardView(for: radio)
+                        }
                 }
             }
             .padding()
         }
+        .background(ScreenPainter.backgroundColor.edgesIgnoringSafeArea(.all))
+            .sheet(isPresented: showAddRadioDialog) {
+        
+                RadioAddView(showAddRadioDialog: showAddRadioDialog, radioFetcher: radioFetcher)
+            }
         .onAppear {
             Task {
                 await radioFetcher.fetchRadios()
@@ -361,9 +370,7 @@ class ScreenPainter: ObservableObject {
         backgroundColor = color
     }
 
-    static func updateTitleFont(to font: Font) {
-        titleFont = font
-    }
+    
 
     static func updateBodyFont(to font: Font) {
         bodyFont = font

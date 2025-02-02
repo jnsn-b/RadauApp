@@ -7,20 +7,19 @@ struct MainView: View {
     @State private var selectedTab: Int = 0
     @StateObject private var authChecker = AuthorizationChecker()
     @StateObject private var podcastFetcher = PodcastFetcher()
-    @ObservedObject var miniPlayerManager = ScreenPainter.miniPlayerManager
     @StateObject private var playlistFetcher = PlaylistFetcher()
-    @State private var selectedPodcastURL: String? = nil
-    @State private var showPodcastDetail: Bool = false
-    @State private var showAddPodcastDialog: Bool = false
-    @State private var episodes: [PodcastFetcher.PodcastEpisode] = []
-    @State private var selectedPodcastTitle: String? = nil
-    @State private var podcastImageData: Data? = nil
     @StateObject private var podcastStore = PodcastStore()
-    @ObservedObject private var radioFetcher = RadioFetcher()
-    @State private var showAddRadioDialog: Bool = false
-    @State private var selectedRadio: Radio? = nil
-    @State var currentRadio: Radio? = nil
-    @State private var currentRadioID: String? = nil
+    @StateObject private var radioFetcher = RadioFetcher()
+  
+    @EnvironmentObject var audioPlayer: AudioPlayer
+    @EnvironmentObject var playerUI: PlayerUIState
+
+    @State private var showAddPodcastDialog = false
+
+    // ✅ Fehlende State-Variablen für radioView()
+    @State private var showAddRadioDialog = false
+    @State private var currentRadio: Radio?
+    @State private var currentRadioID: String?
 
     var body: some View {
         GeometryReader { geometry in
@@ -35,17 +34,18 @@ struct MainView: View {
                         .pickerStyle(SegmentedPickerStyle())
                         .padding()
 
-                        // Alle UI-Views werden jetzt von `ScreenPainter` übernommen
+                        // ✅ Alle UI-Views jetzt mit AudioPlayer
                         if selectedTab == 0 {
-                            ScreenPainter.musicView(playlistFetcher: playlistFetcher, miniPlayerManager: miniPlayerManager)
+                            ScreenPainter.musicView(playlistFetcher: playlistFetcher, audioPlayer: audioPlayer)
                         } else if selectedTab == 1 {
                             ScreenPainter.podcastView(podcastStore: podcastStore, podcastFetcher: podcastFetcher, showAddPodcastDialog: $showAddPodcastDialog)
                         } else {
-                            ScreenPainter.radioView(radioFetcher: radioFetcher, showAddRadioDialog: $showAddRadioDialog, currentRadio: $currentRadio, currentRadioID: $currentRadioID)
+                            ScreenPainter.radioView(
+                                radioFetcher: radioFetcher, showAddRadioDialog: $showAddRadioDialog, currentRadio: $currentRadio, currentRadioID: $currentRadioID, audioPlayer: audioPlayer)
                         }
                     }
                     .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
+                   .toolbar {
                         ToolbarItem(placement: .principal) {
                             Text("Deine RadauApp")
                                 .font(ScreenPainter.titleFont)
@@ -55,17 +55,21 @@ struct MainView: View {
                     .background(ScreenPainter.backgroundColor.edgesIgnoringSafeArea(.all))
                 }
 
-                // MiniPlayer wird ebenfalls von `ScreenPainter` verwaltet
-                ScreenPainter.renderMiniPlayer()
+                // ✅ MiniPlayer erscheint automatisch, wenn Audio läuft
+            if playerUI.showPlayer || audioPlayer.isPlaying {
+                PlayerView()
+                    .environmentObject(audioPlayer)
+                    .environmentObject(playerUI)
+                    .edgesIgnoringSafeArea(.bottom)
+                
+        
+                }
             }
             .background(ScreenPainter.backgroundColor.edgesIgnoringSafeArea(.all))
             .onAppear {
                 DispatchQueue.main.async {
                     authChecker.checkAppleMusicAuthorization()
                 }
-            }
-            .sheet(isPresented: $miniPlayerManager.showPlayer) {
-                MusicPlayerView(musicPlayer: miniPlayerManager.musicPlayer, showMiniPlayer: $miniPlayerManager.showMiniPlayer)
             }
         }
     }
