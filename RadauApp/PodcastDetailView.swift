@@ -18,12 +18,7 @@ struct PodcastDetailView: View {
         VStack {
             episodesList
             
-            if playerUI.showPlayer || audioPlayer.isPlaying {
-                PlayerView()
-                    .environmentObject(audioPlayer)
-                    .environmentObject(playerUI)
-                    .edgesIgnoringSafeArea(.bottom)
-            }
+         
         }
         .onAppear(perform: fetchEpisodes)
         .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all))
