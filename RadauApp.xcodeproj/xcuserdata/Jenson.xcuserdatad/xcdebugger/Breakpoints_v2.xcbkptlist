@@ -14,10 +14,40 @@
             filePath = "RadauApp/AudioPlayer.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "352"
-            endingLineNumber = "352"
+            startingLineNumber = "359"
+            endingLineNumber = "359"
             landmarkName = "playShuffledQueue()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "84ACCA8D-5CE1-4B1F-86FA-DB2CA8ACA0E6 - 96b40299834a25c1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "RadauApp.AudioPlayer.pause() -&gt; ()"
+                  moduleName = "RadauApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Jenson/Documents/1_Projekte/RadauApp/RadauApp/RadauApp/AudioPlayer.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "359"
+                  endingLineNumber = "359">
+               </Location>
+               <Location
+                  uuid = "84ACCA8D-5CE1-4B1F-86FA-DB2CA8ACA0E6 - 21dc9889f31dc85f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "RadauApp.AudioPlayer.playShuffledQueue() -&gt; ()"
+                  moduleName = "RadauApp.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Jenson/Documents/1_Projekte/RadauApp/RadauApp/RadauApp/AudioPlayer.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "359"
+                  endingLineNumber = "359">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

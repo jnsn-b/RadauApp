@@ -163,8 +163,8 @@
 			children = (
 				4EBD6B7B2C6DF9740072A639 /* Assets.xcassets */,
 				4ED2D3222D4AD338001609C4 /* AudioPlayer.swift */,
-				4ED2D3242D4AD5A2001609C4 /* AudioPlayerView.swift */,
 				4ED2D31E2D4AD14A001609C4 /* AudioPlayerProtocol.swift */,
+				4ED2D3242D4AD5A2001609C4 /* AudioPlayerView.swift */,
 				4EAEB9BC2D47E66800929BEA /* AudioSessionManager.swift */,
 				4EBD6B6C2C6DF4B10072A639 /* AuthorizationChecker.swift */,
 				4EBD6B8B2C6EA4E40072A639 /* Color.swift */,

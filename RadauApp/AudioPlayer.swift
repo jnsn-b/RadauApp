@@ -175,7 +175,14 @@ class AudioPlayer: ObservableObject {
         self.avPlayer?.play()
         self.isPlaying = true
 
-        updatePodcastArtwork() // ✅ Stelle sicher, dass das Cover korrekt geladen wird
+        updatePodcastArtwork()
+        
+        extractID3Image(from: url) { [weak self] image in
+                    DispatchQueue.main.async {
+                        self?.artwork = image ?? UIImage(systemName: "mic.fill")
+                        print(image != nil ? "🎨 ID3-Tag Artwork gesetzt" : "❌ Kein ID3-Tag Artwork gefunden")
+                    }
+                }
     }
     
     func updatePodcastArtwork() {
@@ -439,4 +446,19 @@ class AudioPlayer: ObservableObject {
             print("❌ Fehler beim Aktivieren der Audio-Session: \(error.localizedDescription)")
         }
     }
+    
+    private func extractID3Image(from url: URL, completion: @escaping (UIImage?) -> Void) {
+            let asset = AVAsset(url: url)
+            asset.loadValuesAsynchronously(forKeys: ["commonMetadata"]) {
+                let metadata = asset.commonMetadata
+                
+                for item in metadata {
+                    if item.commonKey == .commonKeyArtwork, let data = item.dataValue, let image = UIImage(data: data) {
+                        completion(image)
+                        return
+                    }
+                }
+                completion(nil) // Falls kein Bild gefunden wird
+            }
+        }
 }
