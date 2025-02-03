@@ -12,7 +12,7 @@ class PodcastFetcher: ObservableObject {
         let name: String
         let feedURL: String
         let artworkFilePath: String?
-        var episodes: [PodcastEpisode] = [] // ✅ Fehlendes Property hinzugefügt
+        var episodes: [PodcastEpisode] = [] 
     }
     
     // 🎧 Podcast-Episoden-Modell
@@ -73,8 +73,9 @@ class PodcastFetcher: ObservableObject {
     
     // 📥 Lade Episoden für einen Podcast
     func fetchEpisodes(from feedURL: String, podcast: Podcast) async -> [PodcastEpisode] {
+        print("🔍 Starte Episoden-Fetch für: \(podcast.name)")
         guard let url = URL(string: feedURL) else {
-            print("Ungültige RSS-URL")
+            print("❌ Ungültige Feed-URL: \(feedURL)")
             return []
         }
         
@@ -86,12 +87,13 @@ class PodcastFetcher: ObservableObject {
                 case .success(let feed):
                     var episodes: [PodcastEpisode] = []
                     var podcastTitle: String = podcast.name
-
+                    
                     switch feed {
                     case .rss(let rssFeed):
                         podcastTitle = rssFeed.title ?? podcast.name
                         
                         if let items = rssFeed.items {
+                            print("✅ \(items.count) Episoden im Feed gefunden!")
                             for item in items {
                                 let duration = PodcastFetcher.parseTimeInterval(item.iTunes?.iTunesDuration)
                                 let durationString = String(duration)
@@ -105,14 +107,16 @@ class PodcastFetcher: ObservableObject {
                                 episodes.append(episode)
                             }
                         }
-
+                        
                     case .atom, .json:
-                        print("Nicht unterstütztes Feed-Format")
+                        print("⚠️ Nicht unterstütztes Feed-Format für: \(podcast.name)")
                     }
+                    
+                    print("📥 \(episodes.count) Episoden für \(podcast.name) geladen!")
                     continuation.resume(returning: episodes)
 
                 case .failure(let error):
-                    print("Fehler beim Parsen des Feeds: \(error)")
+                    print("❌ Fehler beim Parsen des Feeds für \(podcast.name): \(error)")
                     continuation.resume(returning: [])
                 }
             }

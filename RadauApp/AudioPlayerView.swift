@@ -298,7 +298,7 @@ struct PlayerView: View {
                 Spacer()
                 Button(action: {
                     if audioPlayer.isPodcastMode {
-                        audioPlayer.nextPodcastEpisode()
+                        audioPlayer.nextPodcastEpisode(episodes: audioPlayer.currentPodcast?.episodes ?? [])
                     } else {
                         audioPlayer.next()
                     }

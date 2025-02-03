@@ -8,19 +8,24 @@ struct PodcastDetailView: View {
     @State private var episodes: [PodcastFetcher.PodcastEpisode] = []
     @State private var isPlaying: Bool = false
     @StateObject private var podcastFetcher = PodcastFetcher()
+    @ObservedObject var podcastStore: PodcastStore
+    
+    @State private var displayedEpisodes: Int = 20
+    @State private var isLoading = false
 
-    init(podcast: Binding<PodcastFetcher.Podcast>) {
-        self._podcast = podcast
-        fetchEpisodes()
-    }
+    init(podcast: Binding<PodcastFetcher.Podcast>, podcastStore: PodcastStore) {
+            self._podcast = podcast
+            self.podcastStore = podcastStore
+            loadEpisodesFromStore()
+        }
 
     var body: some View {
         VStack {
             episodesList
-            //14:48
+            
          
         }
-        .onAppear(perform: fetchEpisodes)
+        .onAppear(perform: loadEpisodesFromStore)
         .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all))
         .navigationBarTitle($podcast.wrappedValue.name ?? "Podcast", displayMode: .inline)
         .toolbar {
@@ -60,31 +65,70 @@ struct PodcastDetailView: View {
     }
 
     private var episodesList: some View {
-        List(episodes) { episode in
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(episode.title)
-                        .font(.headline)
-                    Text("\(episode.durationInMinutes) Min.")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+        List {
+            ForEach(episodes.prefix(displayedEpisodes)) { episode in
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(episode.title)
+                            .font(.headline)
+                        Text("\(episode.durationInMinutes) Min.")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                    Spacer()
                 }
-                Spacer()
+                .onTapGesture {
+                    audioPlayer.playPodcast(episode: episode, podcast: podcast)
+                    isPlaying = true
+                    playerUI.showPlayer = true
+                }
             }
-            .onTapGesture {
-                audioPlayer.playPodcast(episode: episode, podcast: podcast)
-                isPlaying = true
-                playerUI.showPlayer = true
+
+            // 🔄 **Lade mehr Episoden beim Scrollen nach unten**
+            if displayedEpisodes < episodes.count {
+                HStack {
+                    Spacer()
+                    ProgressView()  // ⏳ Lade-Indikator
+                    Spacer()
+                }
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        displayedEpisodes += 20  // 👈 Lade 20 weitere Episoden
+                    }
+                }
             }
         }
     }
 
-    private func fetchEpisodes() {
-        Task {
-            let fetchedEpisodes = await podcastFetcher.fetchEpisodes(from: podcast.feedURL, podcast: podcast)
+    private func loadEpisodesFromStore() {
+        if let storedPodcast = podcastStore.podcasts.first(where: { $0.id == podcast.id }) {
+            self.episodes = storedPodcast.episodes
+            print("📌 Episoden aus `PodcastStore` geladen: \(episodes.count) Episoden.")
+            
+            if storedPodcast.episodes.isEmpty, !isLoading { // 🛑 Doppelte Requests verhindern
+                print("⚠️ Podcast gefunden, aber keine Episoden gespeichert! Lade jetzt nach...")
+                
+                isLoading = true  // 🔄 Setze Ladezustand
 
-            DispatchQueue.main.async {
-                self.episodes = fetchedEpisodes
+                Task {
+                    await podcastStore.loadEpisodes()
+                    DispatchQueue.main.async {
+                        if let updatedPodcast = podcastStore.podcasts.first(where: { $0.id == podcast.id }) {
+                            self.episodes = updatedPodcast.episodes
+                            print("✅ Episoden nachgeladen: \(episodes.count) Episoden.")
+                        }
+                        isLoading = false  // ✅ Ladezustand zurücksetzen
+                    }
+                }
+            }
+        } else {
+            print("⚠️ Podcast nicht im `PodcastStore`. Ladevorgang startet...")
+            if !isLoading {  // 🛑 Verhindert mehrfachen Ladevorgang
+                isLoading = true
+                Task {
+                    await podcastStore.loadEpisodes()
+                    isLoading = false
+                }
             }
         }
     }

@@ -239,7 +239,7 @@ class ScreenPainter: ObservableObject {
                         .foregroundColor(.white)
                 } else {
                     ForEach(podcastStore.podcasts, id: \.id) { podcast in
-                        NavigationLink(destination: PodcastDetailView(podcast: .constant(podcast))) {
+                        NavigationLink(destination: PodcastDetailView(podcast: .constant(podcast), podcastStore: podcastStore)) {
                             podcastCardView(for: podcast)
                         
                         }
@@ -253,9 +253,15 @@ class ScreenPainter: ObservableObject {
             PodcastAddView(showAddPodcastDialog: showAddPodcastDialog, podcastFetcher: podcastFetcher)
         }
         .onAppear {
-            podcastStore.loadPodcasts()
+                if podcastStore.podcasts.isEmpty {
+                    print("📢 `podcastView` onAppear: Lade Podcasts, da Liste leer ist.")
+                    podcastStore.loadPodcasts()
+                } else {
+                    print("✅ `podcastView` onAppear: Podcasts bereits geladen.")
+                }
+            }
         }
-    }
+    
 
     /// Erstellt die Radio-Ansicht
     /// - Parameters:

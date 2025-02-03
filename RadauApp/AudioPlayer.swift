@@ -179,8 +179,12 @@ class AudioPlayer: ObservableObject {
         
         extractID3Image(from: url) { [weak self] image in
                     DispatchQueue.main.async {
-                        self?.artwork = image ?? UIImage(systemName: "mic.fill")
-                        print(image != nil ? "🎨 ID3-Tag Artwork gesetzt" : "❌ Kein ID3-Tag Artwork gefunden")
+                        if image != nil {
+                            self?.artwork = image ?? UIImage(systemName: "mic.fill")
+                            print("🎨 ID3-Tag Artwork gesetzt")
+                        } else {
+                            print("❌ Kein ID3-Tag Artwork gefunden, Podcast Artwork bleibt")
+                        }
                     }
                 }
     }
@@ -215,58 +219,25 @@ class AudioPlayer: ObservableObject {
     }
 
     // ⏭ Nächste Episode
-    func nextPodcastEpisode() {
-        print("⏭ Versuche, nächste Podcast-Episode zu spielen...")
-
-        guard let currentEpisode = currentEpisode else {
-            print("❌ Fehler: `currentEpisode` ist nil!")
-            return
-        }
-
-        guard let podcast = currentPodcast else {
-            print("❌ Fehler: `currentPodcast` ist nil!")
-            return
-        }
-
-        let episodes = currentEpisodeList // ✅ Nutze `currentEpisodeList`
-
-        if episodes.isEmpty {
-            print("❌ Fehler: `currentEpisodeList` ist leer!")
-            return
-        }
-
-        print("📻 Episoden-Liste enthält \(episodes.count) Einträge:")
-        for ep in episodes {
-            print("  ▶️ \(ep.title) – ID: \(ep.id)")
-        }
-
-        guard let currentIndex = episodes.firstIndex(where: { $0.id == currentEpisode.id }) else {
-            print("❌ Fehler: Konnte aktuelle Episode nicht in `currentEpisodeList` finden!")
-            return
-        }
-
-        print("📻 Aktuelle Episode Index: \(currentIndex) von \(episodes.count - 1)")
-
-        guard currentIndex + 1 < episodes.count else {
-            print("⏭ Keine weitere Episode vorhanden!")
-            return
-        }
+    func nextPodcastEpisode(episodes: [PodcastFetcher.PodcastEpisode]) {
+        guard let currentEpisode = currentEpisode,
+              let podcast = currentPodcast,
+              let currentIndex = episodes.firstIndex(where: { $0.id == currentEpisode.id }),
+              currentIndex + 1 < episodes.count else { return } 
 
         let nextEpisode = episodes[currentIndex + 1]
-        print("✅ Nächste Episode: \(nextEpisode.title) wird abgespielt!")
-
-        playPodcast(episode: nextEpisode, podcast: podcast) // ✅ Lädt automatisch aus `currentEpisodeList`
+        playPodcast(episode: nextEpisode, podcast: podcast)
     }
 
     // ⏮ Vorherige Episode
     func previousPodcastEpisode(episodes: [PodcastFetcher.PodcastEpisode]) {
         guard let currentEpisode = currentEpisode,
-              let podcast = currentPodcast, // ✅ Sicherstellen, dass das Podcast-Objekt existiert
+              let podcast = currentPodcast,
               let currentIndex = episodes.firstIndex(where: { $0.id == currentEpisode.id }),
               currentIndex - 1 >= 0 else { return }
 
         let previousEpisode = episodes[currentIndex - 1]
-        playPodcast(episode: previousEpisode, podcast: podcast) // ✅ Podcast-Objekt mit übergeben
+        playPodcast(episode: previousEpisode, podcast: podcast)
     }
 
     // ⏹ Stoppen (Radio, Podcast & AVPlayer)
