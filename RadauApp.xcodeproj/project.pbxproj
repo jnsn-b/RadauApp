@@ -57,6 +57,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4E0CFCA82D50CD3C006E9F48 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		4E5B170D2C6CD6A10078948F /* RadauApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RadauApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E5B171D2C6CD6A50078948F /* RadauAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RadauAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E5B17212C6CD6A50078948F /* RadauAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadauAppTests.swift; sourceTree = "<group>"; };
@@ -122,6 +123,7 @@
 		4E5B17042C6CD6A10078948F = {
 			isa = PBXGroup;
 			children = (
+				4E0CFCA82D50CD3C006E9F48 /* .gitignore */,
 				4EBD6B692C6DF47B0072A639 /* RadauApp */,
 				4E5B17202C6CD6A50078948F /* RadauAppTests */,
 				4E5B172A2C6CD6A50078948F /* RadauAppUITests */,
