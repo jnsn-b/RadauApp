@@ -16,35 +16,35 @@ struct PodcastDetailView: View {
 
     var body: some View {
         VStack {
-            podcastArtwork
-
-            Text(podcast.name)
-                .font(.title)
-                .fontWeight(.bold)
-                .padding()
-
             episodesList
             
-
-            // ✅ `PlayerView` statt `playerControls`
             if playerUI.showPlayer || audioPlayer.isPlaying {
                 PlayerView()
                     .environmentObject(audioPlayer)
                     .environmentObject(playerUI)
                     .edgesIgnoringSafeArea(.bottom)
             }
-            
         }
-        
         .onAppear(perform: fetchEpisodes)
+        .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all))
+        .navigationBarTitle($podcast.wrappedValue.name ?? "Podcast", displayMode: .inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                HStack {
+                    podcastArtwork(width: 24, height: 24) // Klein für die Navigation Bar
+                    
+                    Text($podcast.wrappedValue.name ?? "Podcast")
+                        .font(.headline)
+                }
+            }
+        }
         .onChange(of: audioPlayer.isPlaying) { newValue in
             isPlaying = newValue
-
         }
-        
     }
 
-    private var podcastArtwork: some View {
+    /// 🎨 Flexible Funktion für Podcast-Artwork mit variabler Größe
+    private func podcastArtwork(width: CGFloat, height: CGFloat) -> some View {
         Group {
             if let artworkPath = podcast.artworkFilePath,
                FileManager.default.fileExists(atPath: artworkPath),
@@ -52,14 +52,13 @@ struct PodcastDetailView: View {
                let image = UIImage(data: imageData) {
                 Image(uiImage: image)
                     .resizable()
-                    .scaledToFit()
-                    .frame(width: 120, height: 120)
-                    .cornerRadius(10)
+                    .aspectRatio(contentMode: .fit) // Bild wird nicht verzerrt
+                    .frame(width: width, height: height) // Dynamische Größe
             } else {
                 Image(systemName: "mic.fill")
                     .resizable()
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: width, height: height)
                     .foregroundColor(.gray)
             }
         }
@@ -78,14 +77,11 @@ struct PodcastDetailView: View {
                 Spacer()
             }
             .onTapGesture {
-                
                 audioPlayer.playPodcast(episode: episode, podcast: podcast)
                 isPlaying = true
                 playerUI.showPlayer = true
             }
         }
-        
-       
     }
 
     private func fetchEpisodes() {
