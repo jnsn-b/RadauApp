@@ -17,7 +17,7 @@ struct PodcastDetailView: View {
     var body: some View {
         VStack {
             episodesList
-            //tst
+            //14:48
          
         }
         .onAppear(perform: fetchEpisodes)
