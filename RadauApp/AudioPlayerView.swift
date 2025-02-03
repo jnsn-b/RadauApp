@@ -82,9 +82,11 @@ struct PlayerView: View {
         // 📌 🎵 **FullPlayer jetzt als echtes Popup**
     private func fullPlayerView(geometry: GeometryProxy) -> some View {
         if isLandscape {
-            return AnyView(landscapePlayerView()) // ✅ `geometry` entfernt
+            return AnyView(landscapePlayerView())
+                .shadow(color: .black.opacity(0.75), radius: 50, x: 0, y: -5)
         } else {
-            return AnyView(portraitPlayerView()) // ✅ `geometry` entfernt
+            return AnyView(portraitPlayerView())
+                .shadow(color: .black.opacity(0.75), radius: 50, x: 0, y: -5)
         }
     }
         
@@ -131,6 +133,7 @@ struct PlayerView: View {
                 controlsView
                 Spacer()
             }
+            .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 1)
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all))
@@ -176,6 +179,7 @@ struct PlayerView: View {
                     }
                 }
             }
+            .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 1)
             .padding()
             .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.bottom))
             .shadow(color: .gray.opacity(0.4), radius: 5, x: 0, y: 2)
