@@ -117,6 +117,7 @@ struct PlayerView: View {
             VStack {
                 Spacer()
                 artworkView(size: CGSize(width: 300, height: 300))
+                    .frame(maxWidth: .infinity, alignment: .center)
                 if audioPlayer.isShuffleEnabled {
                            Image(systemName: "shuffle")
                                .foregroundColor(.gray)
@@ -241,10 +242,12 @@ struct PlayerView: View {
                 Text(audioPlayer.currentTitle)
                     .font(.title)
                     .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
                     .padding(.top, 10)
                 Text(audioPlayer.currentSource)
                     .font(.subheadline)
                     .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
             }
         }
         
