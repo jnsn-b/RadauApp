@@ -9,6 +9,8 @@ class ScreenPainter: ObservableObject {
     
     /// Published Property für Playlist-Bilder
     @Published var playlistImages: [UInt64: UIImage] = [:]
+    static let shared = ScreenPainter()
+    static var instanceCount = 0
 
     // MARK: - Farbschema und Schriftarten
     
@@ -40,15 +42,23 @@ class ScreenPainter: ObservableObject {
     // MARK: - Initialisierung
     
     /// Initialisiert die ScreenPainter-Instanz und lädt die Bilder
-    init() {
-        loadImages()
+    private init() {
+        print("✅ ScreenPainter init() - Neue Instanz wird erstellt.")
+                ScreenPainter.instanceCount += 1
+                print("ScreenPainter init() aufgerufen. Instanz Nummer: \(ScreenPainter.instanceCount)")
+                print("LOAD IMAGES WEGEN INIT()")
+                loadImages()
+        
     }
 
     // MARK: - Bild-Management
 
     /// Lädt alle gespeicherten Bilder für Playlists
     func loadImages() {
-        playlistImages = PlaylistImageHandler.shared.loadAllImages()
+      
+            playlistImages = PlaylistImageHandler.shared.loadAllImages()
+            
+    
     }
 
     /// Aktualisiert das Bild einer Playlist
@@ -120,7 +130,7 @@ class ScreenPainter: ObservableObject {
         NavigationLink(destination: PlaylistDetailView(playlist: playlist)) {
             mediaCardView(
                 title: playlist.name ?? "Unbenannte Playlist",
-                image: ScreenPainter().playlistImages[playlist.persistentID],
+                image: ScreenPainter.shared.playlistImages[playlist.persistentID] ?? getBestArtwork(for: playlist)?.image(at: CGSize(width: 100, height: 100)),
                 placeholder: "music.note.list",
                 size: CGSize(width: 100, height: 100)
             )
@@ -187,7 +197,7 @@ class ScreenPainter: ObservableObject {
                         .onTapGesture {
                                                 audioPlayer.switchPlayer(toAppleMusic: true)
                                                 audioPlayer.setQueue(with: playlist.items)
-                                                if let firstItem = playlist.items.first {
+                                                if playlist.items.first != nil {
                                                     audioPlayer.play()
                                                 }
                                             }
@@ -208,7 +218,7 @@ class ScreenPainter: ObservableObject {
     /// - Returns: Eine View mit der Podcast-Ansicht
     static func podcastView(podcastStore: PodcastStore, podcastFetcher: PodcastFetcher, showAddPodcastDialog: Binding<Bool>) -> some View {
         ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))], spacing: 40) {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 40) {
                 // Button zum Hinzufügen eines neuen Podcasts
                 Button(action: { showAddPodcastDialog.wrappedValue = true }) {
                     VStack {
@@ -262,7 +272,7 @@ class ScreenPainter: ObservableObject {
         audioPlayer: AudioPlayer
     ) -> some View {
         ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))], spacing: 40) {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 40) {
                 Button(action: { showAddRadioDialog.wrappedValue = true }) {
                     VStack {
                         Image(systemName: "plus.circle.fill")

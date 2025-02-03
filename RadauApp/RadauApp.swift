@@ -5,7 +5,7 @@ import SwiftUI
 struct RadauApp: App {
     @StateObject private var audioPlayer = AudioPlayer()
     @StateObject var playerUI = PlayerUIState()
-    // Initialisierer für die App, um das Erscheinungsbild der Navigationsleiste zu konfigurieren
+    // Initialisierer für die App, um das Erscheinungsbild der Navigationsleiste zu konfigurieren.
     init() {
         // Erstellung einer neuen UINavigationBarAppearance-Instanz
         let appearance = UINavigationBarAppearance()
@@ -29,6 +29,8 @@ struct RadauApp: App {
         
         // Festlegen der Farbe für den Zurück-Pfeil und den Text in der Navigationsleiste auf Weiß
         UINavigationBar.appearance().tintColor = .white
+        
+    
     }
 
     // Hauptinhalt der App

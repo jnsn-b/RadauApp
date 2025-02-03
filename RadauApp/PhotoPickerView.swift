@@ -61,6 +61,7 @@ struct PhotoPickerView: UIViewControllerRepresentable {
                             self?.parent.selectedImage = uiImage
                             // Speichert das Bild für die Playlist mit der entsprechenden ID
                             PlaylistImageHandler.shared.saveImage(uiImage, for: self?.parent.playlistID ?? 0)
+                            
                         }
                     }
                 }

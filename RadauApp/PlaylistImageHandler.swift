@@ -54,27 +54,49 @@ class PlaylistImageHandler {
 
     // Alle gespeicherten Bilder laden
     func loadAllImages() -> [UInt64: UIImage] {
-        var images: [UInt64: UIImage] = [:]
-        
-        // Holen der gespeicherten Pfade aus UserDefaults
-        let savedPaths = UserDefaults.standard.dictionary(forKey: "playlistImages") as? [String: String] ?? [:]
-
-        // Base-URL für das Documents-Verzeichnis
-        let documentsDirectory = getDocumentsDirectory()
-
-        for (key, fileName) in savedPaths {
-            if let playlistID = UInt64(key) {
-                // Rekonstruiere den vollständigen Pfad, indem nur der Dateiname genutzt wird
-                let filePath = documentsDirectory.appendingPathComponent(fileName)
-
-                if let image = UIImage(contentsOfFile: filePath.path) {
-                    images[playlistID] = image
+            var images: [UInt64: UIImage] = [:]
+            
+            // Holen der gespeicherten Pfade aus UserDefaults
+            let savedPaths = UserDefaults.standard.dictionary(forKey: "playlistImages") as? [String: String] ?? [:]
+            
+            // Base-URL für das Documents-Verzeichnis
+            let documentsDirectory = getDocumentsDirectory()
+            
+            for (key, fileName) in savedPaths {
+                // Prüfen, ob der Key eine gültige Playlist-ID ist (numerisch)
+                guard let playlistID = UInt64(key) else {
+                    print("⚠️ Ungültiger Playlist-Key: \(key) → konnte nicht in UInt64 umgewandelt werden.")
+                    continue
+                }
+                
+                // Prüfen, ob der gespeicherte Pfad ein absoluter Pfad ist
+                var correctedFileName = fileName
+                if fileName.hasPrefix("/") {
+                    correctedFileName = URL(fileURLWithPath: fileName).lastPathComponent
+                    print("🔄 Korrigiere absoluten Pfad: \(fileName) → \(correctedFileName)")
+                }
+                
+                // Erstelle den vollständigen Pfad
+                let filePath = documentsDirectory.appendingPathComponent(correctedFileName)
+                
+                // Datei existiert?
+                if FileManager.default.fileExists(atPath: filePath.path) {
+                    if let image = UIImage(contentsOfFile: filePath.path) {
+                        images[playlistID] = image
+                        print("✅ Erfolgreich geladen: \(filePath.path) für Playlist-ID: \(playlistID)")
+                    } else {
+                        print("⚠️ Datei existiert, aber konnte nicht als UIImage geladen werden: \(filePath.path)")
+                    }
                 } else {
-                    print("❌ Bild für Playlist \(playlistID) konnte nicht geladen werden: \(filePath.path)")
+                    print("❌ Datei nicht gefunden für Playlist \(playlistID): \(filePath.path)")
                 }
             }
-        }
-
-        return images
+            
+            print("🎵 Fertig mit dem Laden der Bilder. Geladene Bilder: \(images.count)")
+            
+            return images
+ 
     }
+    
+
 }

@@ -41,7 +41,7 @@ struct PlaylistDetailView: View {
                             .onDisappear {
                                 
                                 if let image = selectedImage {
-                                    let screenPainter = ScreenPainter()
+                                    let screenPainter = ScreenPainter.shared
                                     screenPainter.updateImage(for: playlist, image: image)
                                 }
                             }
