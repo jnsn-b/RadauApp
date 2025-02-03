@@ -154,7 +154,7 @@ struct PlaylistDetailView: View {
                                 .foregroundColor(ScreenPainter.textColor)
                         }
                     }
-                    .background(ScreenPainter.primaryColor)
+                    //.background(ScreenPainter.primaryColor)
                     .onTapGesture {
                         shuffleAndPlay()
                     }
