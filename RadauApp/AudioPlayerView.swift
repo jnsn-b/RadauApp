@@ -110,6 +110,7 @@ struct PlayerView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.trailing, 20)
             }
+            .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 1)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all))
             .cornerRadius(15)
@@ -179,10 +180,9 @@ struct PlayerView: View {
                     }
                 }
             }
-            .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 1)
+           
             .padding()
             .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.bottom))
-            .shadow(color: .gray.opacity(0.4), radius: 5, x: 0, y: 2)
             .frame(maxWidth: .infinity)
             .frame(height: max(60, min(UIScreen.main.bounds.height * 0.12, 100)))
             .onTapGesture {

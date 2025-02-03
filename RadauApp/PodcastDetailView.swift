@@ -26,6 +26,7 @@ struct PodcastDetailView: View {
          
         }
         .onAppear(perform: loadEpisodesFromStore)
+        
         .background(ScreenPainter.primaryColor.edgesIgnoringSafeArea(.all))
         .navigationBarTitle($podcast.wrappedValue.name ?? "Podcast", displayMode: .inline)
         .toolbar {
@@ -38,9 +39,11 @@ struct PodcastDetailView: View {
                 }
             }
         }
+       
         .onChange(of: audioPlayer.isPlaying) { newValue in
             isPlaying = newValue
         }
+        .background(ScreenPainter.primaryColor)
     }
 
     /// 🎨 Flexible Funktion für Podcast-Artwork mit variabler Größe
@@ -68,6 +71,9 @@ struct PodcastDetailView: View {
         List {
             ForEach(episodes.prefix(displayedEpisodes)) { episode in
                 HStack {
+                    Text("🎙️") 
+                    .font(.title2)
+                    
                     VStack(alignment: .leading) {
                         Text(episode.title)
                             .font(.headline)
@@ -77,6 +83,8 @@ struct PodcastDetailView: View {
                     }
                     Spacer()
                 }
+                .background(ScreenPainter.primaryColor)
+                .listRowBackground(ScreenPainter.primaryColor)
                 .onTapGesture {
                     audioPlayer.playPodcast(episode: episode, podcast: podcast)
                     isPlaying = true
@@ -98,6 +106,10 @@ struct PodcastDetailView: View {
                 }
             }
         }
+        .listStyle(PlainListStyle()) // ✅ Entfernt jegliche Gruppierung/Styling der Liste
+        .background(ScreenPainter.primaryColor) // ✅ Hintergrund für gesamte Liste
+        .frame(maxWidth: .infinity, maxHeight: .infinity) // ✅ Deckt alles ab
+         
     }
 
     private func loadEpisodesFromStore() {

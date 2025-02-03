@@ -84,7 +84,8 @@ struct PlaylistDetailView: View {
                     }
                     Spacer()
                 }
-               
+                .background(ScreenPainter.primaryColor)
+                       .listRowBackground(ScreenPainter.primaryColor)
                 .onTapGesture {
                     shuffleAndPlay()
                 }
