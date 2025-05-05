@@ -18,7 +18,7 @@
 	<string>Wir benötigen Zugriff auf deine Musikbibliothek, um deine Lieblingssongs abzuspielen.</string>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>processing</string>
+		<string>audio</string>
 	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
@@ -29,5 +29,7 @@
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
 		<true/>
 	</dict>
+	<key></key>
+	<string></string>
 </dict>
 </plist>

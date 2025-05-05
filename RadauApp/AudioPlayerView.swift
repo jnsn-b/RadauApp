@@ -171,7 +171,11 @@ struct PlayerView: View {
                 }
                 if !audioPlayer.isRadioMode {
                     Button(action: {
-                        audioPlayer.next()
+                        if audioPlayer.isPodcastMode {
+                            audioPlayer.nextPodcastEpisode(episodes: audioPlayer.currentPodcast?.episodes ?? [])
+                        } else {
+                            audioPlayer.next()
+                        }
                     }) {
                         Image(systemName: "forward.fill")
                             .resizable()

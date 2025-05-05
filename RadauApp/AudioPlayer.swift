@@ -35,11 +35,11 @@ class AudioPlayer: ObservableObject {
 
     init(useAppleMusic: Bool = false) {
         self.isUsingAppleMusic = useAppleMusic
-        setupAudioSession()
+       // AudioSessionManager.shared.activateAVPlayerSession()
         switchPlayer(toAppleMusic: useAppleMusic)
-        
+        setupRemoteTransportControls()
         if useAppleMusic {
-            setupAppleMusicNotifications()
+            setupNowPlayingNotifications()
             appleMusicPlayer?.beginGeneratingPlaybackNotifications()
         } else {
             setupAVPlayerObservers() 
@@ -56,13 +56,14 @@ class AudioPlayer: ObservableObject {
             appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer
             avPlayer = nil
             print("🎵 Apple Music Player aktiviert.")
-            setupAppleMusicNotifications()
+            setupNowPlayingNotifications()
         } else {
             appleMusicPlayer = nil
             avPlayer = AVPlayer()
             print("🎶 AVPlayer aktiviert.")
             setupAVPlayerObservers()
         }
+        setupRemoteTransportControls()
     }
     
     func updateArtwork() {
@@ -80,7 +81,11 @@ class AudioPlayer: ObservableObject {
     // 📻 Radio-Stream starten
     func playRadio(radio: Radio) {
         AudioSessionManager.shared.activateAVPlayerSession()
+        setupNowPlayingNotifications()
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = [:]
         var streamURL = radio.streamURL
+        
+        isShuffleEnabled = false
 
         // Falls HTTP-Stream existiert, ersetze es mit HTTPS, falls möglich
         if streamURL.hasPrefix("http://") {
@@ -90,9 +95,11 @@ class AudioPlayer: ObservableObject {
                     streamURL = secureURL
                 }
                 self.startRadioPlayback(from: streamURL, radio: radio)
+                self.setupNowPlayingNotifications()
             }
         } else {
             startRadioPlayback(from: streamURL, radio: radio)
+            self.setupNowPlayingNotifications()
         }
     }
 
@@ -113,7 +120,39 @@ class AudioPlayer: ObservableObject {
         self.avPlayer = AVPlayer(url: url)
         self.avPlayer?.play()
         self.isPlaying = true
+
+        // Platzhalter-Artwork setzen
+           let placeholderImage = UIImage(systemName: "antenna.radiowaves.left.and.right")
+           self.artwork = placeholderImage
         
+        // 🔄 Metadaten für Now Playing setzen
+        var nowPlayingInfo: [String: Any] = [:]
+        nowPlayingInfo[MPMediaItemPropertyTitle] = "Live-Stream"
+        nowPlayingInfo[MPMediaItemPropertyArtist] = radio.name
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
+
+        // Platzhalter-Artwork hinzufügen
+            if let artworkImage = artwork {
+                let artwork = MPMediaItemArtwork(boundsSize: artworkImage.size) { _ in return artworkImage }
+                nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
+            }
+        
+        // Falls ein Sender-Logo existiert, füge es hinzu
+        if let artworkImage = artwork {
+            let artwork = MPMediaItemArtwork(boundsSize: artworkImage.size) { _ in return artworkImage }
+            nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
+        }
+
+        // ✅ MPNowPlayingInfoCenter setzen
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        updateNowPlayingInfo()
+        // Überprüfe die aktuellen Werte
+        if let currentInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo {
+            print("✅ Aktuelle NowPlayingInfo: \(currentInfo)")
+        } else {
+            print("❌ Keine NowPlayingInfo gesetzt.")
+        }
+
         updateRadioArtwork(for: radio)
 
         print("✅ Radio-Wiedergabe gestartet: \(radio.name)")
@@ -147,23 +186,26 @@ class AudioPlayer: ObservableObject {
 
     // 🎙 Podcast starten
     func playPodcast(episode: PodcastFetcher.PodcastEpisode, podcast: PodcastFetcher.Podcast) {
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = [:]
+        AudioSessionManager.shared.activateAVPlayerSession()
         print("▶️ Spiele Podcast-Episode: \(episode.title) aus \(podcast.name)")
 
         self.currentEpisode = episode
-        self.currentPodcast = podcast 
+        self.currentPodcast = podcast
         self.currentTitle = episode.title
         self.currentSource = podcast.name
         self.isPodcastMode = true
         self.isRadioMode = false
         self.isUsingAppleMusic = false
 
+        isShuffleEnabled = false
         // ✅ Sicherstellen, dass `currentPodcast?.episodes` gesetzt ist
         if self.currentEpisodeList.isEmpty {
-                self.currentEpisodeList = podcast.episodes
-                print("📌 `currentEpisodeList` gesetzt mit \(podcast.episodes.count) Episoden.")
-            } else {
-                print("📌 `currentEpisodeList` bereits vorhanden.")
-            }
+            self.currentEpisodeList = podcast.episodes
+            print("📌 `currentEpisodeList` gesetzt mit \(podcast.episodes.count) Episoden.")
+        } else {
+            print("📌 `currentEpisodeList` bereits vorhanden.")
+        }
 
         guard let url = URL(string: episode.playbackURL) else {
             print("❌ Ungültige URL für Episode: \(episode.title)")
@@ -173,20 +215,23 @@ class AudioPlayer: ObservableObject {
         let playerItem = AVPlayerItem(url: url)
         self.avPlayer = AVPlayer(playerItem: playerItem)
         self.avPlayer?.play()
+        updateNowPlayingInfo()
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo
         self.isPlaying = true
 
         updatePodcastArtwork()
         
         extractID3Image(from: url) { [weak self] image in
-                    DispatchQueue.main.async {
-                        if image != nil {
-                            self?.artwork = image ?? UIImage(systemName: "mic.fill")
-                            print("🎨 ID3-Tag Artwork gesetzt")
-                        } else {
-                            print("❌ Kein ID3-Tag Artwork gefunden, Podcast Artwork bleibt")
-                        }
-                    }
+            DispatchQueue.main.async {
+                if image != nil {
+                    self?.artwork = image ?? UIImage(systemName: "mic.fill")
+                    print("🎨 ID3-Tag Artwork gesetzt")
+                } else {
+                    print("❌ Kein ID3-Tag Artwork gefunden, Podcast Artwork bleibt")
                 }
+                self?.updateNowPlayingInfo()
+            }
+        }
     }
     
     func updatePodcastArtwork() {
@@ -270,7 +315,7 @@ class AudioPlayer: ObservableObject {
         }
     }
 
-    // 🎶 Apple Music Steuerung
+    
     func play() {
         if isUsingAppleMusic {
             print("▶️ Play gedrückt für Apple Music...")
@@ -279,6 +324,8 @@ class AudioPlayer: ObservableObject {
             
         } else {
             avPlayer?.play()
+            updateNowPlayingInfo()
+            isShuffleEnabled = false
         }
         isPlaying = true
         updateArtwork()
@@ -294,6 +341,7 @@ class AudioPlayer: ObservableObject {
             appleMusicPlayer?.play()
         } else {
             avPlayer?.pause()
+            isShuffleEnabled = false
             if let url = item.assetURL {
                 avPlayer = AVPlayer(url: url)
                 avPlayer?.play()
@@ -383,24 +431,84 @@ class AudioPlayer: ObservableObject {
     }
 
     // 📡 Apple Music Status-Updates
-    private func setupAppleMusicNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateSongInfo), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: appleMusicPlayer)
-        NotificationCenter.default.addObserver(self, selector: #selector(updatePlaybackState), name: .MPMusicPlayerControllerPlaybackStateDidChange, object: appleMusicPlayer)
-        appleMusicPlayer?.beginGeneratingPlaybackNotifications()  // ✅ Stellt sicher, dass Events registriert werden
+    private func setupNowPlayingNotifications() {
+        if isUsingAppleMusic {
+            NotificationCenter.default.addObserver(self, selector: #selector(updateNowPlayingInfo), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: appleMusicPlayer)
+            NotificationCenter.default.addObserver(self, selector: #selector(updateNowPlayingState), name: .MPMusicPlayerControllerPlaybackStateDidChange, object: appleMusicPlayer)
+            appleMusicPlayer?.beginGeneratingPlaybackNotifications()
+        } else {
+            NotificationCenter.default.addObserver(self, selector: #selector(updateNowPlayingInfo), name: .AVPlayerItemNewAccessLogEntry, object: avPlayer?.currentItem)
+            NotificationCenter.default.addObserver(self, selector: #selector(updateNowPlayingState), name: .AVPlayerItemDidPlayToEndTime, object: avPlayer?.currentItem)
+        }
     }
     
-    @objc private func updatePlaybackState() {
-        isPlaying = appleMusicPlayer?.playbackState == .playing
+    @objc private func updateNowPlayingState() {
+        if isUsingAppleMusic {
+            isPlaying = appleMusicPlayer?.playbackState == .playing
+        } else {
+            isPlaying = avPlayer?.rate != 0
+        }
+    }
+    
+    @objc private func updateNowPlayingInfo() {
+        print("🔄 updateNowPlayingInfo wurde aufgerufen!")
+
+        var nowPlayingInfo: [String: Any] = [:]
+
+        if isUsingAppleMusic {
+            guard let song = appleMusicPlayer?.nowPlayingItem else {
+                print("❌ Kein Song in Apple Music gefunden")
+                return
+            }
+            currentTitle = song.title ?? "Unbekannt"
+            currentSource = song.artist ?? "Unbekannt"
+            nowPlayingInfo[MPMediaItemPropertyTitle] = currentTitle
+            nowPlayingInfo[MPMediaItemPropertyArtist] = currentSource
+        } else {
+            if isRadioMode {
+                print("📻 Radio-Modus erkannt")
+                currentTitle = "Live-Stream"
+                nowPlayingInfo[MPMediaItemPropertyTitle] = "Live-Stream"
+                nowPlayingInfo[MPMediaItemPropertyArtist] = currentSource
+            } else if let episode = currentEpisode, let podcast = currentPodcast {
+                print("🎙 Podcast erkannt: \(episode.title) aus \(podcast.name)")
+                currentTitle = episode.title
+                currentSource = podcast.name
+                nowPlayingInfo[MPMediaItemPropertyTitle] = episode.title
+                nowPlayingInfo[MPMediaItemPropertyArtist] = podcast.name
+            } else {
+                print("🎶 AVPlayer Streaming-Modus erkannt")
+                currentTitle = "Streaming..."
+                nowPlayingInfo[MPMediaItemPropertyTitle] = "Streaming..."
+            }
+            // Zeitinformationen für AVPlayer/Podcast/Radio ergänzen
+            if let player = avPlayer, let currentItem = player.currentItem {
+                let currentTime = player.currentTime().seconds
+                let duration = currentItem.asset.duration.seconds
+                if duration.isFinite {
+                    nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentTime
+                    nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = duration
+                }
+            }
+        }
+
+        // 🔄 Cover setzen, falls verfügbar
+        if let artworkImage = artwork {
+            let artwork = MPMediaItemArtwork(boundsSize: artworkImage.size) { _ in return artworkImage }
+            nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
+        } else {
+            print("❌ Kein Artwork verfügbar")
+        }
+
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = isPlaying ? 1.0 : 0.0
+
+        // ✅ Korrektes Setzen der Metadaten
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        print("✅ MPNowPlayingInfoCenter wurde aktualisiert: \(nowPlayingInfo)")
     }
 
-    @objc private func updateSongInfo() {
-        guard let song = appleMusicPlayer?.nowPlayingItem else { return }
-        currentTitle = song.title ?? "Unbekannt"
-        currentSource = song.artist ?? "Unbekannt"
-        currentSong = song
-        updateArtwork()
-    }
 
+    
     // 🎧 AVPlayer Status-Updates
     private func setupAVPlayerObservers() {
         avPlayer?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 600), queue: .main) { [weak self] time in
@@ -408,15 +516,7 @@ class AudioPlayer: ObservableObject {
         }
     }
     
-    private func setupAudioSession() {
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
-            try AVAudioSession.sharedInstance().setActive(true)
-            print("✅ Audio-Session erfolgreich aktiviert!")
-        } catch {
-            print("❌ Fehler beim Aktivieren der Audio-Session: \(error.localizedDescription)")
-        }
-    }
+    
     
     private func extractID3Image(from url: URL, completion: @escaping (UIImage?) -> Void) {
             let asset = AVAsset(url: url)
@@ -432,4 +532,20 @@ class AudioPlayer: ObservableObject {
                 completion(nil) // Falls kein Bild gefunden wird
             }
         }
+    // 🔊 Remote Transport Controls für Sperrbildschirm & Control Center
+    private func setupRemoteTransportControls() {
+        let commandCenter = MPRemoteCommandCenter.shared()
+
+        commandCenter.playCommand.isEnabled = true
+        commandCenter.playCommand.addTarget { [weak self] event in
+            self?.play()
+            return .success
+        }
+
+        commandCenter.pauseCommand.isEnabled = true
+        commandCenter.pauseCommand.addTarget { [weak self] event in
+            self?.pause()
+            return .success
+        }
+    }
 }
